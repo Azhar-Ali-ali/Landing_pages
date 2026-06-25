@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Artisan | Gourmet Pizza, Burgers, Sandwiches & Fries</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Playfair Display (Serif) & Inter (Sans-Serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        syne: ['Syne', 'sans-serif'],
+                    },
+                    colors: {
+                        bistro: {
+                            cream: '#FAF8F5',
+                            dark: '#1C1917',
+                            olive: '#2D3A2E',
+                            accent: '#C27D38', // Warm Copper/Amber
+                            softOlive: '#E8EFE9',
+                            muted: '#78716C',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C27D38;
+            border-radius: 3px;
+        }
+        
+        /* Custom premium animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .tab-transition {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="bg-bistro-cream text-bistro-dark font-sans overflow-x-hidden">
+
+<!-- Top Promotion Bar -->
+<div class="bg-bistro-olive text-bistro-cream py-2 px-4 text-xs tracking-widest text-center uppercase font-medium">
+    <span class="inline-block animate-pulse mr-2">✦</span> Complimentary hand-cut rosemary truffle fries on orders above $45
+</div>
+
+<!-- Sticky Premium Header -->
+<header class="sticky top-0 z-40 bg-bistro-cream/90 backdrop-blur-md border-b border-bistro-dark/5 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        
+        <!-- Logo -->
+        <a href="#" class="flex items-center space-x-2 group">
+            <span class="font-serif italic text-2xl font-bold tracking-tight text-bistro-olive group-hover:text-bistro-accent transition-colors duration-300">L'Artisan</span>
+            <span class="w-1.5 h-1.5 bg-bistro-accent rounded-full"></span>
+        </a>
+
+        <!-- Desktop Navigation Menu -->
+        <nav class="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wide uppercase">
+            <a href="#" class="text-bistro-accent border-b border-bistro-accent pb-1">Home</a>
+            <a href="#menu-section" class="text-bistro-dark hover:text-bistro-accent transition-colors duration-300 pb-1">Our Menu</a>
+            <a href="#story-section" class="text-bistro-dark hover:text-bistro-accent transition-colors duration-300 pb-1">The Craft</a>
+            <a href="#testimonials" class="text-bistro-dark hover:text-bistro-accent transition-colors duration-300 pb-1">Bespoke Reviews</a>
+        </nav>
+
+        <!-- Right Action Center -->
+        <div class="flex items-center space-x-4">
+            <!-- Search bar (Premium Minimal style) -->
+            <div class="relative hidden sm:block">
+                <input type="text" id="menu-search" oninput="handleSearch(this.value)" placeholder="Craving Truffle Pizza..." class="bg-bistro-softOlive/60 border border-bistro-dark/10 rounded-full py-1.5 pl-4 pr-10 text-xs focus:outline-none focus:ring-1 focus:ring-bistro-accent w-48 transition-all duration-300">
+                <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-bistro-muted text-xs"></i>
+            </div>
+
+            <!-- Custom Interactive Cart Button -->
+            <button onclick="toggleCartDrawer()" class="relative bg-bistro-olive text-bistro-cream hover:bg-bistro-accent p-3 rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center group">
+                <i class="fa-solid fa-bag-shopping text-sm group-hover:scale-110 transition-transform duration-300"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-bistro-accent text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-bistro-cream shadow-sm scale-0 transition-transform duration-300">0</span>
+            </button>
+
+            <!-- Mobile Menu Toggle -->
+            <button onclick="toggleMobileMenu()" class="md:hidden text-bistro-dark hover:text-bistro-accent focus:outline-none p-2">
+                <i class="fa-solid fa-bars text-xl" id="mobile-menu-icon"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden bg-bistro-cream border-t border-bistro-dark/5 py-4 px-6 space-y-4 shadow-inner">
+        <a href="#" class="block text-sm font-semibold text-bistro-accent uppercase">Home</a>
+        <a href="#menu-section" onclick="toggleMobileMenu()" class="block text-sm font-medium text-bistro-dark hover:text-bistro-accent uppercase">Our Menu</a>
+        <a href="#story-section" onclick="toggleMobileMenu()" class="block text-sm font-medium text-bistro-dark hover:text-bistro-accent uppercase">The Craft</a>
+        <a href="#testimonials" onclick="toggleMobileMenu()" class="block text-sm font-medium text-bistro-dark hover:text-bistro-accent uppercase">Bespoke Reviews</a>
+        <div class="pt-4 border-t border-bistro-dark/5">
+            <input type="text" oninput="handleSearch(this.value)" placeholder="Search burgers, pizzas, fries..." class="w-full bg-bistro-softOlive/60 border border-bistro-dark/10 rounded-full py-2 px-4 text-xs focus:outline-none">
+        </div>
+    </div>
+</header>
+
+<main>
+    <!-- Hero / Showcase -->
+    <section class="relative bg-bistro-cream overflow-hidden pt-10 pb-20 lg:pt-16 lg:pb-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Text Block -->
+                <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-bistro-softOlive px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider text-bistro-olive">
+                        <span class="w-2 h-2 bg-bistro-accent rounded-full animate-ping"></span>
+                        <span>Now Baking: Organic Wood-fired Sourdough Pizza</span>
+                    </div>
+                    
+                    <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-bistro-dark leading-none">
+                        Bespoke <br class="hidden sm:inline">
+                        <span class="italic text-bistro-accent font-normal">culinary craft</span> <br>
+                        delivered home.
+                    </h1>
+                    
+                    <p class="text-bistro-muted text-base sm:text-lg max-w-lg mx-auto lg:mx-0 leading-relaxed font-light">
+                        Indulge in stone-baked pizzas, hand-pressed premium wagyu burgers, wild yeast organic sandwiches, and double-fried rosemary-dusted gold potatoes. Designed with culinary passion.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                        <a href="#menu-section" class="w-full sm:w-auto text-center px-8 py-4 bg-bistro-olive text-bistro-cream hover:bg-bistro-accent rounded-full font-medium tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 uppercase text-xs">
+                            Explore the Menu <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                        <a href="#story-section" class="w-full sm:w-auto text-center px-8 py-4 bg-transparent border border-bistro-dark/10 hover:border-bistro-accent text-bistro-dark hover:text-bistro-accent rounded-full font-medium tracking-wide transition-all duration-300 uppercase text-xs">
+                            Discover the Craft
+                        </a>
+                    </div>
+
+                    <!-- Micro Feature Elements -->
+                    <div class="grid grid-cols-3 gap-4 pt-10 border-t border-bistro-dark/5 max-w-md mx-auto lg:mx-0">
+                        <div>
+                            <span class="block font-serif text-2xl font-bold text-bistro-olive">24hr</span>
+                            <span class="text-xs text-bistro-muted tracking-wide uppercase font-medium">Slow-Ferment Sourdough</span>
+                        </div>
+                        <div>
+                            <span class="block font-serif text-2xl font-bold text-bistro-olive">100%</span>
+                            <span class="text-xs text-bistro-muted tracking-wide uppercase font-medium">Organic Ingredients</span>
+                        </div>
+                        <div>
+                            <span class="block font-serif text-2xl font-bold text-bistro-olive">40m</span>
+                            <span class="text-xs text-bistro-muted tracking-wide uppercase font-medium">Gourmet Delivery Guarantee</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Elegant Graphic Composition -->
+                <div class="lg:col-span-6 relative flex justify-center">
+                    <!-- Elegant Background Shapes -->
+                    <div class="absolute inset-0 bg-bistro-softOlive rounded-full filter blur-3xl opacity-60 w-80 h-80 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10"></div>
+                    
+                    <div class="relative w-full max-w-[480px] aspect-square rounded-[2rem] overflow-hidden shadow-2xl border-4 border-bistro-cream bg-white group animate-float">
+                        <img id="hero-carousel-img" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=800" alt="Wood fired Pizza" class="w-full h-full object-cover transition-all duration-1000 ease-in-out">
+                        
+                        <!-- Premium floating overlay tags -->
+                        <div class="absolute top-6 left-6 bg-bistro-dark/85 backdrop-blur-md text-bistro-cream px-4 py-2 rounded-full text-xs font-medium tracking-widest uppercase flex items-center space-x-2">
+                            <i class="fa-solid fa-star text-bistro-accent"></i>
+                            <span>Signature Truffle Crust</span>
+                        </div>
+                        
+                        <div class="absolute bottom-6 right-6 bg-bistro-cream/95 backdrop-blur-md text-bistro-dark px-5 py-3 rounded-2xl shadow-xl max-w-xs flex items-center space-x-3 border border-bistro-dark/5">
+                            <div class="p-2 bg-bistro-softOlive rounded-full">
+                                <i class="fa-solid fa-burger text-bistro-accent text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-serif font-bold text-sm">Chef's Gourmet Series</h4>
+                                <p class="text-[10px] text-bistro-muted">Sourced with locally harvested truffles & wagyu.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Promos Grid -->
+    <section class="bg-bistro-softOlive py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-3 mb-12">
+                <span class="text-xs tracking-widest text-bistro-accent uppercase font-semibold">Limited Reserve curation</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-bistro-dark">Exclusive Bistro Delicacies</h2>
+                <p class="text-sm text-bistro-muted max-w-md mx-auto">Seasonal offerings curated with peak ingredients by Chef de Cuisine</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Promo Card 1 -->
+                <div class="bg-bistro-cream rounded-2xl p-6 border border-bistro-dark/5 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-bistro-accent text-white py-1 px-4 text-[10px] font-bold tracking-widest uppercase rounded-bl-xl">Best Seller</div>
+                    <span class="inline-block p-3 bg-bistro-softOlive rounded-full text-bistro-olive mb-4">
+                        <i class="fa-solid fa-pizza-slice text-xl"></i>
+                    </span>
+                    <h3 class="font-serif text-xl font-bold mb-2 group-hover:text-bistro-accent transition-colors">Truffle & Forest Mushroom Pizza</h3>
+                    <p class="text-xs text-bistro-muted mb-4">Wild chanterelles, black truffle cream, double-fermented sourdough crust, cold-pressed olive oil.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="font-serif font-bold text-bistro-olive text-lg">$24.00</span>
+                        <button onclick="directAdd('Truffle & Forest Mushroom Pizza', 24.00, 'pizza', 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=400')" class="px-4 py-2 bg-bistro-dark hover:bg-bistro-accent text-bistro-cream rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300">Add Direct</button>
+                    </div>
+                </div>
+
+                <!-- Promo Card 2 -->
+                <div class="bg-bistro-cream rounded-2xl p-6 border border-bistro-dark/5 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+                    <span class="inline-block p-3 bg-bistro-softOlive rounded-full text-bistro-olive mb-4">
+                        <i class="fa-solid fa-burger text-xl"></i>
+                    </span>
+                    <h3 class="font-serif text-xl font-bold mb-2 group-hover:text-bistro-accent transition-colors">The Heritage Aged Wagyu Burger</h3>
+                    <p class="text-xs text-bistro-muted mb-4">Aged Wagyu, melted Gruyère, caramelized onion marmalade, toasted artisanal brioche roll.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="font-serif font-bold text-bistro-olive text-lg">$22.00</span>
+                        <button onclick="directAdd('The Heritage Aged Wagyu Burger', 22.00, 'burgers', 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=400')" class="px-4 py-2 bg-bistro-dark hover:bg-bistro-accent text-bistro-cream rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300">Add Direct</button>
+                    </div>
+                </div>
+
+                <!-- Promo Card 3 -->
+                <div class="bg-bistro-cream rounded-2xl p-6 border border-bistro-dark/5 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group md:col-span-2 lg:col-span-1">
+                    <div class="absolute top-0 right-0 bg-bistro-olive text-white py-1 px-4 text-[10px] font-bold tracking-widest uppercase rounded-bl-xl">Chef Special</div>
+                    <span class="inline-block p-3 bg-bistro-softOlive rounded-full text-bistro-olive mb-4">
+                        <i class="fa-solid fa-bread-slice text-xl"></i>
+                    </span>
+                    <h3 class="font-serif text-xl font-bold mb-2 group-hover:text-bistro-accent transition-colors">Bespoke Rosemary Fries</h3>
+                    <p class="text-xs text-bistro-muted mb-4">Double-fried golden Yukon gold potatoes, tossed with sea salt, hand-stripped rosemary, grated parmesan.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="font-serif font-bold text-bistro-olive text-lg">$9.00</span>
+                        <button onclick="directAdd('Bespoke Rosemary Fries', 9.00, 'fries', 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&q=80&w=400')" class="px-4 py-2 bg-bistro-dark hover:bg-bistro-accent text-bistro-cream rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300">Add Direct</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Interactive Menu Section -->
+    <section id="menu-section" class="py-24 bg-bistro-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Section Header -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                <div class="space-y-3">
+                    <span class="text-xs tracking-widest text-bistro-accent uppercase font-semibold">Taste Profile Curation</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl font-bold text-bistro-dark leading-none">The Artisan Menu</h2>
+                    <p class="text-sm text-bistro-muted max-w-md">Every single item is made-to-order utilizing wild yeasts, slow-raised doughs, and organic ingredients.</p>
+                </div>
+
+                <!-- Filter Navigation Tabs -->
+                <div class="flex flex-wrap gap-2 border-b border-bistro-dark/5 pb-2">
+                    <button onclick="filterCategory('all')" id="tab-all" class="tab-btn px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-bistro-olive text-bistro-cream shadow-md transition-all duration-300">
+                        All Items
+                    </button>
+                    <button onclick="filterCategory('pizza')" id="tab-pizza" class="tab-btn px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-transparent text-bistro-muted hover:text-bistro-dark transition-all duration-300">
+                        Pizza
+                    </button>
+                    <button onclick="filterCategory('burgers')" id="tab-burgers" class="tab-btn px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-transparent text-bistro-muted hover:text-bistro-dark transition-all duration-300">
+                        Burgers
+                    </button>
+                    <button onclick="filterCategory('sandwich')" id="tab-sandwich" class="tab-btn px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-transparent text-bistro-muted hover:text-bistro-dark transition-all duration-300">
+                        Sandwiches
+                    </button>
+                    <button onclick="filterCategory('fries')" id="tab-fries" class="tab-btn px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-transparent text-bistro-muted hover:text-bistro-dark transition-all duration-300">
+                        Fries
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Category Info -->
+            <div id="filter-description" class="text-xs text-bistro-accent tracking-widest uppercase mb-8 font-semibold">
+                Showing all handpicked gourmet preparations
+            </div>
+
+            <!-- Dynamic Menu Grid -->
+            <div id="menu-items-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-500">
+                <!-- Dynamic Content Loaded by JS -->
+            </div>
+
+        </div>
+    </section>
+
+    <!-- The Craft & Quality Story Section -->
+    <section id="story-section" class="py-24 bg-bistro-olive text-bistro-cream relative overflow-hidden">
+        <!-- Accent circles -->
+        <div class="absolute w-96 h-96 rounded-full border border-bistro-cream/5 -top-20 -left-20"></div>
+        <div class="absolute w-[600px] h-[600px] rounded-full border border-bistro-cream/5 -bottom-40 -right-40"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <!-- Editorial Image Collage -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-4">
+                        <div class="rounded-3xl overflow-hidden h-72 shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=400" alt="Cooking Prep" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="bg-bistro-accent rounded-3xl p-8 text-bistro-cream flex flex-col justify-between h-48">
+                            <span class="font-serif italic text-3xl font-light">"Pure Craftsmanship"</span>
+                            <span class="text-[10px] tracking-widest uppercase font-semibold">— Head Baker Pierre</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4 pt-10">
+                        <div class="bg-bistro-softOlive/10 rounded-3xl p-8 border border-bistro-cream/10 h-48 flex flex-col justify-between">
+                            <h4 class="font-serif text-2xl font-bold text-bistro-accent">Double-fermentation</h4>
+                            <p class="text-xs text-bistro-cream/70 font-light leading-relaxed">Our sourdough rises over 24 hours to yield optimal cellular structure & tang.</p>
+                        </div>
+                        <div class="rounded-3xl overflow-hidden h-72 shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=400" alt="Signature Dishes" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Story Text -->
+                <div class="space-y-8">
+                    <div class="space-y-3">
+                        <span class="text-xs tracking-widest text-bistro-accent uppercase font-semibold">Honoring Heritage Bakers</span>
+                        <h2 class="font-serif text-4xl sm:text-5xl font-bold leading-tight">Every dish is an edible narrative.</h2>
+                    </div>
+                    <p class="text-bistro-cream/80 text-sm leading-relaxed font-light">
+                        At L'Artisan, we transcend traditional dining templates. Our crusts are forged from premium hand-milled flours and natural yeasts inherited from three generations of bakers. 
+                    </p>
+                    <p class="text-bistro-cream/80 text-sm leading-relaxed font-light">
+                        Our Wagyu burgers are fresh ground daily, featuring prime brisket cuts with a proprietary blend of dry-aged fat, resulting in unparalleled beefy richness. Every order is packaged in artisanal compostable thermostatic boxes so your gourmet selection arrives at your table exactly as Chef intended.
+                    </p>
+
+                    <!-- Accolades / Values Row -->
+                    <div class="grid grid-cols-2 gap-6 pt-6 border-t border-bistro-cream/10">
+                        <div class="flex items-start space-x-3">
+                            <span class="p-2 bg-bistro-accent/20 rounded-xl text-bistro-accent mt-1">
+                                <i class="fa-solid fa-seedling"></i>
+                            </span>
+                            <div>
+                                <h4 class="font-bold text-sm tracking-wide">100% Bio Sourcing</h4>
+                                <p class="text-xs text-bistro-cream/60">Sourced from organic micro-farms</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="p-2 bg-bistro-accent/20 rounded-xl text-bistro-accent mt-1">
+                                <i class="fa-solid fa-truck-ramp-box"></i>
+                            </span>
+                            <div>
+                                <h4 class="font-bold text-sm tracking-wide">Premium Packaging</h4>
+                                <p class="text-xs text-bistro-cream/60">Thermostatic biodegradable designs</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials section -->
+    <section id="testimonials" class="py-24 bg-bistro-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-3 mb-16">
+                <span class="text-xs tracking-widest text-bistro-accent uppercase font-semibold">Gastronomic Acclaim</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-bistro-dark">What Gourmet Critics Say</h2>
+                <div class="flex justify-center space-x-1 text-bistro-accent">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Critique Card 1 -->
+                <div class="bg-white rounded-2xl p-8 border border-bistro-dark/5 shadow-sm space-y-4">
+                    <p class="text-sm font-light text-bistro-muted italic leading-relaxed">
+                        "The crust on their Truffle & Mushroom pizza is absolutely exceptional. Airy, slightly caramelized, and robustly structured. Simply top-tier delivery."
+                    </p>
+                    <div class="flex items-center space-x-3 pt-4 border-t border-bistro-dark/5">
+                        <div class="w-10 h-10 rounded-full bg-bistro-softOlive flex items-center justify-center font-bold text-bistro-olive">EC</div>
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wide">Eléonore Chevalier</h4>
+                            <span class="text-[10px] text-bistro-accent">Food Critic, Paris Journal</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Critique Card 2 -->
+                <div class="bg-white rounded-2xl p-8 border border-bistro-dark/5 shadow-sm space-y-4">
+                    <p class="text-sm font-light text-bistro-muted italic leading-relaxed">
+                        "The Heritage Aged Wagyu burger is legendary. Finding a delivery burger that maintains perfect medium juiciness and keeps the brioche crisp is incredibly rare."
+                    </p>
+                    <div class="flex items-center space-x-3 pt-4 border-t border-bistro-dark/5">
+                        <div class="w-10 h-10 rounded-full bg-bistro-softOlive flex items-center justify-center font-bold text-bistro-olive">MR</div>
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wide">Marcus Rossi</h4>
+                            <span class="text-[10px] text-bistro-accent">Culinary Writer, Epicurean</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Critique Card 3 -->
+                <div class="bg-white rounded-2xl p-8 border border-bistro-dark/5 shadow-sm space-y-4">
+                    <p class="text-sm font-light text-bistro-muted italic leading-relaxed">
+                        "Those rosemary-dusted truffle fries are dangerous. Crisp skin, soft interior, and perfectly uniform. They pair beautifully with their handcrafted garlic confit dip!"
+                    </p>
+                    <div class="flex items-center space-x-3 pt-4 border-t border-bistro-dark/5">
+                        <div class="w-10 h-10 rounded-full bg-bistro-softOlive flex items-center justify-center font-bold text-bistro-olive">SL</div>
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wide">Serena Lawson</h4>
+                            <span class="text-[10px] text-bistro-accent">Creator, @LuxeGastronomy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Culinary Subscription Banner -->
+    <section class="py-16 bg-bistro-cream border-t border-bistro-dark/5">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6">
+            <h3 class="font-serif text-2xl sm:text-3xl font-bold">Join L'Artisan Inner Circle</h3>
+            <p class="text-xs text-bistro-muted max-w-md mx-auto">Get notified when we drop limited reserve gourmet pizzas, rare craft ingredients, and chef's collaborative tastings.</p>
+            <form onsubmit="handleSubscribe(event)" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input type="email" placeholder="Your curated email address" required class="flex-grow px-5 py-3 rounded-full bg-white border border-bistro-dark/10 focus:outline-none focus:ring-1 focus:ring-bistro-accent text-xs">
+                <button type="submit" class="bg-bistro-olive hover:bg-bistro-accent text-bistro-cream px-8 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+</main>
+
+<footer class="bg-bistro-dark text-bistro-cream py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 border-b border-bistro-cream/10 pb-12">
+            
+            <!-- Brand & Info -->
+            <div class="space-y-4">
+                <a href="#" class="flex items-center space-x-2">
+                    <span class="font-serif italic text-2xl font-bold text-bistro-cream">L'Artisan</span>
+                    <span class="w-1.5 h-1.5 bg-bistro-accent rounded-full"></span>
+                </a>
+                <p class="text-xs text-bistro-cream/60 leading-relaxed font-light">
+                    Elevating standard culinary favorites into gourmet edible masterworks, hand-prepared daily with love.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-bistro-cream/60 hover:text-bistro-accent transition-colors"><i class="fa-brands fa-instagram text-sm"></i></a>
+                    <a href="#" class="text-bistro-cream/60 hover:text-bistro-accent transition-colors"><i class="fa-brands fa-facebook text-sm"></i></a>
+                    <a href="#" class="text-bistro-cream/60 hover:text-bistro-accent transition-colors"><i class="fa-brands fa-pinterest text-sm"></i></a>
+                </div>
+            </div>
+
+            <!-- Hours of Craft -->
+            <div>
+                <h4 class="font-serif text-sm font-bold text-bistro-accent uppercase tracking-widest mb-4">Hours of Craft</h4>
+                <ul class="space-y-2 text-xs text-bistro-cream/70 font-light">
+                    <li>Monday - Friday: 11:30 AM - 10:00 PM</li>
+                    <li>Saturday - Sunday: 11:00 AM - 11:30 PM</li>
+                    <li class="text-bistro-accent">Continuous Sourdough Ferment Batching</li>
+                </ul>
+            </div>
+
+            <!-- Curated Menu Links -->
+            <div>
+                <h4 class="font-serif text-sm font-bold text-bistro-accent uppercase tracking-widest mb-4">The Selection</h4>
+                <ul class="space-y-2 text-xs text-bistro-cream/70 font-light">
+                    <li><a href="#menu-section" class="hover:text-bistro-accent transition-colors">Stone-Baked Pizzas</a></li>
+                    <li><a href="#menu-section" class="hover:text-bistro-accent transition-colors">Aged Wagyu Burgers</a></li>
+                    <li><a href="#menu-section" class="hover:text-bistro-accent transition-colors">Wild Yeast Sandwiches</a></li>
+                    <li><a href="#menu-section" class="hover:text-bistro-accent transition-colors">Hand-Cut Gold Fries</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact & Legal -->
+            <div>
+                <h4 class="font-serif text-sm font-bold text-bistro-accent uppercase tracking-widest mb-4">The Atelier</h4>
+                <ul class="space-y-2 text-xs text-bistro-cream/70 font-light">
+                    <li>742 Artisan Lane, Culinary Arts District</li>
+                    <li>orders@lartisanbistro.com</li>
+                    <li>+1 (555) 349-8120</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-bistro-cream/40">
+            <p>&copy; 2026 L'Artisan Culinary Atelier. All rights reserved.</p>
+            <div class="flex space-x-4 mt-4 sm:mt-0">
+                <a href="#" class="hover:text-bistro-accent transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-bistro-accent transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Sliding Cart Drawer Overlay -->
+<div id="cart-drawer-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-all duration-300" onclick="toggleCartDrawer()"></div>
+
+<!-- Sliding Drawer Content -->
+<aside id="cart-drawer" class="fixed right-0 top-0 bottom-0 w-full sm:w-[450px] bg-bistro-cream z-50 translate-x-full transition-transform duration-500 ease-in-out shadow-2xl flex flex-col border-l border-bistro-dark/10">
+    <!-- Header -->
+    <div class="p-6 border-b border-bistro-dark/5 flex items-center justify-between bg-bistro-olive text-bistro-cream">
+        <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-bag-shopping text-bistro-accent"></i>
+            <h3 class="font-serif text-lg font-bold">Your Selection</h3>
+            <span id="drawer-cart-count" class="text-xs bg-bistro-accent text-white px-2 py-0.5 rounded-full font-bold ml-1">0</span>
+        </div>
+        <button onclick="toggleCartDrawer()" class="text-bistro-cream hover:text-bistro-accent text-lg p-1.5 focus:outline-none">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+
+    <!-- Scrollable Items List -->
+    <div id="cart-items-container" class="flex-grow p-6 overflow-y-auto space-y-4">
+        <!-- Inside here, items will dynamically appear. Empty state is default. -->
+        <div id="empty-cart-state" class="flex flex-col items-center justify-center h-full text-center space-y-4 py-12">
+            <div class="w-16 h-16 bg-bistro-softOlive rounded-full flex items-center justify-center text-bistro-muted text-xl">
+                <i class="fa-solid fa-clipboard-list"></i>
+            </div>
+            <div>
+                <h4 class="font-serif font-bold text-sm text-bistro-dark">Your basket is resting</h4>
+                <p class="text-xs text-bistro-muted max-w-xs mt-1">Sourdoughs, prime cuts, and gold fries await your selection.</p>
+            </div>
+            <button onclick="toggleCartDrawer(); window.location.hash='#menu-section'" class="text-xs font-semibold uppercase tracking-wider bg-bistro-olive text-bistro-cream px-6 py-2.5 rounded-full hover:bg-bistro-accent transition-colors duration-300">Browse Menu</button>
+        </div>
+    </div>
+
+    <!-- Promo code input and Checkout details -->
+    <div id="checkout-pricing" class="hidden p-6 border-t border-bistro-dark/5 bg-bistro-softOlive/30 space-y-4">
+        <!-- Promo Code -->
+        <div class="flex space-x-2">
+            <input type="text" id="promo-input" placeholder="Enter BISTRO10" class="flex-grow px-3 py-2 text-xs border border-bistro-dark/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-bistro-accent uppercase">
+            <button onclick="applyPromoCode()" class="bg-bistro-dark hover:bg-bistro-accent text-bistro-cream text-[10px] font-bold tracking-widest uppercase px-4 py-2 rounded-lg transition-colors">Apply</button>
+        </div>
+        <div id="promo-message" class="text-[10px] font-medium hidden"></div>
+
+        <!-- Prices breakdown -->
+        <div class="space-y-2 text-xs">
+            <div class="flex justify-between text-bistro-muted">
+                <span>Subtotal</span>
+                <span id="subtotal-amount">$0.00</span>
+            </div>
+            <div id="discount-row" class="hidden flex justify-between text-red-600 font-medium">
+                <span>Promo Discount (10%)</span>
+                <span id="discount-amount">-$0.00</span>
+            </div>
+            <div class="flex justify-between text-bistro-muted">
+                <span>Atelier Sourcing & Delivery</span>
+                <span id="shipping-amount">$4.50</span>
+            </div>
+            <div class="flex justify-between text-bistro-muted">
+                <span>Eco-Packaging Fee</span>
+                <span id="eco-fee-amount">$1.50</span>
+            </div>
+            <hr class="border-bistro-dark/5 my-2">
+            <div class="flex justify-between text-sm font-bold text-bistro-dark">
+                <span class="font-serif">Total Curation</span>
+                <span id="grand-total-amount">$0.00</span>
+            </div>
+        </div>
+
+        <!-- Checkout Buttons -->
+        <button onclick="openCheckoutFlow()" class="w-full text-center py-3.5 bg-bistro-olive hover:bg-bistro-accent text-bistro-cream rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg transition-all duration-300">
+            Proceed to Checkout <i class="fa-solid fa-lock ml-2 text-[10px]"></i>
+        </button>
+    </div>
+</aside>
+
+<!-- Customization / Options Modal -->
+<div id="custom-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 p-4">
+    <div class="bg-bistro-cream w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border border-bistro-dark/10 transform scale-95 transition-all duration-300" id="custom-modal-content">
+        <!-- Modal Image -->
+        <div class="h-48 relative overflow-hidden">
+            <img id="modal-item-image" src="" alt="" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-bistro-cream to-transparent"></div>
+            <button onclick="closeCustomModal()" class="absolute top-4 right-4 bg-bistro-dark/70 text-bistro-cream p-2 rounded-full hover:bg-bistro-accent transition-colors">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+
+        <!-- Modal Content Body -->
+        <div class="p-6 space-y-6">
+            <div>
+                <span id="modal-item-badge" class="text-[10px] tracking-widest text-bistro-accent uppercase font-bold">Chef Signature</span>
+                <h3 id="modal-item-name" class="font-serif text-2xl font-bold text-bistro-dark">Item Name</h3>
+                <p id="modal-item-desc" class="text-xs text-bistro-muted mt-1 leading-relaxed font-light">Detailed organic ingredient description.</p>
+            </div>
+
+            <!-- Customization Options -->
+            <div class="space-y-4">
+                <!-- Size Options -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wide text-bistro-dark mb-2">Select Portion / Variation</h4>
+                    <div class="grid grid-cols-2 gap-3" id="variation-options">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Extras Options -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wide text-bistro-dark mb-2">Enhance Curation (Optional Extras)</h4>
+                    <div class="space-y-2" id="extra-options">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Price & Add Basket button -->
+            <div class="flex items-center justify-between pt-6 border-t border-bistro-dark/5">
+                <div>
+                    <span class="text-[10px] text-bistro-muted uppercase block">Estimated total</span>
+                    <span id="modal-total-price" class="font-serif text-2xl font-bold text-bistro-olive">$0.00</span>
+                </div>
+                <button onclick="commitToCart()" class="px-8 py-3 bg-bistro-olive hover:bg-bistro-accent text-bistro-cream rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-300 shadow-md">
+                    Add Curation <i class="fa-solid fa-circle-check ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Checkout/Success Modal -->
+<div id="checkout-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 p-4">
+    <div class="bg-bistro-cream w-full max-w-md rounded-3xl p-8 shadow-2xl border border-bistro-dark/10 text-center transform scale-95 transition-all duration-300 space-y-6" id="checkout-modal-content">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-2xl mx-auto animate-bounce">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        
+        <div class="space-y-2">
+            <h3 class="font-serif text-2xl font-bold text-bistro-dark">Order Dispatch Initiated</h3>
+            <p class="text-xs text-bistro-muted">Our culinary artisans are now handcrafting your gourmet selection. You will receive real-time SMS updates.</p>
+        </div>
+
+        <div class="p-4 bg-bistro-softOlive/50 rounded-xl space-y-2 text-left text-xs">
+            <div class="flex justify-between font-bold text-bistro-olive">
+                <span>Order Reference</span>
+                <span id="receipt-ref">#ART-239401</span>
+            </div>
+            <div class="flex justify-between text-bistro-muted">
+                <span>Delivery Time</span>
+                <span>Approximately 35-40 Minutes</span>
+            </div>
+            <div class="flex justify-between text-bistro-muted">
+                <span>Sourced Delivery address</span>
+                <span>Gourmet Residence Suite</span>
+            </div>
+            <div class="flex justify-between font-bold text-bistro-dark pt-2 border-t border-bistro-dark/5">
+                <span>Final Paid</span>
+                <span id="receipt-total">$0.00</span>
+            </div>
+        </div>
+
+        <div class="flex space-x-3">
+            <button onclick="closeCheckoutModal()" class="w-full py-3 bg-bistro-olive hover:bg-bistro-accent text-bistro-cream rounded-xl text-xs font-bold uppercase tracking-wider transition-colors duration-300">
+                Continue Exploring Menu
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Toast Notification System -->
+<div id="toast" class="fixed bottom-6 left-6 z-50 bg-bistro-dark text-bistro-cream px-5 py-3 rounded-xl shadow-2xl border border-bistro-cream/10 text-xs tracking-wide flex items-center space-x-3 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-500">
+    <span class="p-1.5 bg-bistro-accent rounded-full flex items-center justify-center"><i class="fa-solid fa-bell text-white"></i></span>
+    <span id="toast-message">Curated selection added to your basket!</span>
+</div>
+
+<script>
+    // --- DATABASE ---
+    const MENU_ITEMS = [
+        {
+            id: 'pizza-truffle',
+            name: 'The Truffle Forest',
+            category: 'pizza',
+            price: 24.00,
+            desc: 'Black truffle pate, wild organic chanterelles, house-fermented sourdough base, fresh fior di latte, white truffle oil mist.',
+            img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=600',
+            badge: 'Limited Reserve',
+            variations: [
+                { name: 'Artisanal Medium (12")', priceDelta: 0 },
+                { name: 'Grand Board (16")', priceDelta: 6.00 }
+            ],
+            extras: [
+                { name: 'Double Black Truffle Dusting', price: 3.50 },
+                { name: 'Organic Mozzarella di Bufala', price: 2.50 }
+            ]
+        },
+        {
+            id: 'pizza-calabrian',
+            name: 'Spicy Calabrian Nduja',
+            category: 'pizza',
+            price: 22.00,
+            desc: 'Hand-stretched sourdough, organic crushed San Marzano tomatoes, Calabrian nduja sausage, hot honey drizzle, fresh basil.',
+            img: 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&q=80&w=600',
+            badge: 'Chef Choice',
+            variations: [
+                { name: 'Artisanal Medium (12")', priceDelta: 0 },
+                { name: 'Grand Board (16")', priceDelta: 6.00 }
+            ],
+            extras: [
+                { name: 'Double Nduja Sausage', price: 3.00 },
+                { name: 'In-house Fermented Chili Oil', price: 1.00 }
+            ]
+        },
+        {
+            id: 'burger-heritage',
+            name: 'The Heritage Aged Wagyu',
+            category: 'burgers',
+            price: 22.00,
+            desc: '200g premium aged Wagyu beef blend, molten cave-aged Gruyère, sweet slow-caramelized onion jam, toasted brioche.',
+            img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=600',
+            badge: 'Gourmet Benchmark',
+            variations: [
+                { name: 'Standard Medium Cut', priceDelta: 0 },
+                { name: 'Double Stack Wagyu Slabs', priceDelta: 8.00 }
+            ],
+            extras: [
+                { name: 'Crisp Smoked Applewood Bacon', price: 2.50 },
+                { name: 'Pan-Fried Organic Hen Egg', price: 2.00 }
+            ]
+        },
+        {
+            id: 'burger-chicken',
+            name: 'Smoky Maple Butter Chicken',
+            category: 'burgers',
+            price: 18.00,
+            desc: 'Hand-battered crispy free-range breast, smoky pure maple syrup glaze, purple cabbage slaw, toasted seed brioche.',
+            img: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&q=80&w=600',
+            badge: 'Popular',
+            variations: [
+                { name: 'Mild & Sweet Glaze', priceDelta: 0 },
+                { name: 'Super Hot Ghost Pepper Glaze', priceDelta: 1.00 }
+            ],
+            extras: [
+                { name: 'Aged Sharp White Cheddar Melt', price: 1.50 },
+                { name: 'House-made Garlic Aioli Dip', price: 1.00 }
+            ]
+        },
+        {
+            id: 'sandwich-caprese',
+            name: 'Atelier Caprese on Focaccia',
+            category: 'sandwich',
+            price: 16.00,
+            desc: 'House-baked rosemary olive focaccia, vine heirloom tomatoes, walnut basil pesto, rich buffalo mozzarella, balsamic glaze reduction.',
+            img: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&q=80&w=600',
+            badge: 'Plant-Based Option',
+            variations: [
+                { name: 'Light Herb Slices', priceDelta: 0 },
+                { name: 'Thick Focaccia Loaf', priceDelta: 2.00 }
+            ],
+            extras: [
+                { name: 'Artisanal Prosciutto di Parma', price: 4.00 },
+                { name: 'Smoked Sun-Dried Tomatoes', price: 1.50 }
+            ]
+        },
+        {
+            id: 'sandwich-brisket',
+            name: 'Slow-Braised Brisket Melt',
+            category: 'sandwich',
+            price: 19.50,
+            desc: '12-hour braised pasture-raised brisket, melted English cheddar cheese, pickled mustard seeds, local toasted sourdough bread.',
+            img: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&q=80&w=600',
+            badge: 'Craft Special',
+            variations: [
+                { name: 'Classic Half Sourdough', priceDelta: 0 },
+                { name: 'Double Meat Stuffed Crust', priceDelta: 5.00 }
+            ],
+            extras: [
+                { name: 'Sweet Jalapeño Relish', price: 1.00 },
+                { name: 'Gourmet Truffle Dip Tub', price: 2.00 }
+            ]
+        },
+        {
+            id: 'fries-rosemary',
+            name: 'Rosemarinus Truffle Fries',
+            category: 'fries',
+            price: 9.00,
+            desc: 'Triple-fried golden Idaho russet wedges, freshly shaved Grana Padano parmesan, premium white truffle oil mist, fresh farm rosemary.',
+            img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&q=80&w=600',
+            badge: 'Signature Companion',
+            variations: [
+                { name: 'Artisan Side Crate', priceDelta: 0 },
+                { name: 'Sharing Banquet Trough', priceDelta: 4.00 }
+            ],
+            extras: [
+                { name: 'Extra Shaved Parmesan Reggiano', price: 1.50 },
+                { name: 'Warm Spicy Cheese Fondue Dip', price: 2.00 }
+            ]
+        },
+        {
+            id: 'fries-sweet',
+            name: 'Sweet Honey Gold Harvest Fries',
+            category: 'fries',
+            price: 9.50,
+            desc: 'Crunchy sweet potato batons, warm hand-poured spice dust, hot organic wildflower honey drizzle, fresh sprigs of sage.',
+            img: 'https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&q=80&w=600',
+            badge: 'Sweet & Savory',
+            variations: [
+                { name: 'Artisan Side Crate', priceDelta: 0 },
+                { name: 'Sharing Banquet Trough', priceDelta: 4.00 }
+            ],
+            extras: [
+                { name: 'Additional Hot Honey pot', price: 1.00 },
+                { name: 'Whipped Salted Butter side', price: 1.50 }
+            ]
+        }
+    ];
+
+    // --- CAROUSEL BACKGROUND IMAGES ---
+    const HERO_IMAGES = [
+        'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=800', // Pizza
+        'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=800', // Burger
+        'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&q=80&w=800', // Sandwich
+        'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&q=80&w=800'  // Fries
+    ];
+    let heroImageIndex = 0;
+    setInterval(() => {
+        heroImageIndex = (heroImageIndex + 1) % HERO_IMAGES.length;
+        const imgEl = document.getElementById('hero-carousel-img');
+        if (imgEl) {
+            imgEl.style.opacity = '0';
+            setTimeout(() => {
+                imgEl.src = HERO_IMAGES[heroImageIndex];
+                imgEl.style.opacity = '1';
+            }, 500);
+        }
+    }, 5000);
+
+    // --- STATE MANAGEMENT ---
+    let cart = [];
+    let currentSelectedItem = null;
+    let selectedVariation = null;
+    let selectedExtras = [];
+    let isPromoApplied = false;
+
+    // --- INITIALIZATION ---
+    window.onload = function() {
+        renderMenuItems(MENU_ITEMS);
+    }
+
+    // --- RENDER FUNCTIONS ---
+    function renderMenuItems(items) {
+        const grid = document.getElementById('menu-items-grid');
+        grid.innerHTML = '';
+
+        if (items.length === 0) {
+            grid.innerHTML = `
+                <div class="col-span-full py-20 text-center text-bistro-muted">
+                    <p class="font-serif italic text-lg mb-2">The kitchen is silent on this combination</p>
+                    <p class="text-xs">Try searching another premium ingredient or profile.</p>
+                </div>
+            `;
+            return;
+        }
+
+        items.forEach(item => {
+            const card = document.createElement('div');
+            card.className = "bg-white rounded-3xl overflow-hidden border border-bistro-dark/5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group";
+            card.innerHTML = `
+                <div class="h-64 overflow-hidden relative">
+                    <img src="${item.img}" alt="${item.name}" onerror="this.onerror=null; this.src='https://placehold.co/600x400/FAF8F5/1C1917?text=${item.name}'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <span class="absolute top-4 left-4 bg-bistro-dark/85 backdrop-blur-md text-bistro-cream px-3 py-1 rounded-full text-[10px] tracking-wider uppercase font-medium">
+                        ${item.badge}
+                    </span>
+                </div>
+                <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex items-start justify-between">
+                            <h3 class="font-serif text-lg font-bold text-bistro-dark group-hover:text-bistro-accent transition-colors duration-300">${item.name}</h3>
+                            <span class="font-serif font-bold text-bistro-olive text-base ml-2">$${item.price.toFixed(2)}</span>
+                        </div>
+                        <p class="text-xs text-bistro-muted leading-relaxed font-light">${item.desc}</p>
+                    </div>
+                    
+                    <button onclick="openCustomModal('${item.id}')" class="w-full py-3 bg-bistro-softOlive text-bistro-olive hover:bg-bistro-accent hover:text-bistro-cream rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 shadow-sm flex items-center justify-center space-x-2">
+                        <span>Personalize & Basket</span>
+                        <i class="fa-solid fa-sliders text-[10px]"></i>
+                    </button>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    // --- FILTER & SEARCH LOGIC ---
+    function filterCategory(category) {
+        // Toggle Active styles on tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('bg-bistro-olive', 'text-bistro-cream', 'shadow-md');
+            btn.classList.add('bg-transparent', 'text-bistro-muted');
+        });
+
+        const activeBtn = document.getElementById(`tab-${category}`);
+        if (activeBtn) {
+            activeBtn.classList.add('bg-bistro-olive', 'text-bistro-cream', 'shadow-md');
+            activeBtn.classList.remove('bg-transparent', 'text-bistro-muted');
+        }
+
+        const filtered = category === 'all' ? MENU_ITEMS : MENU_ITEMS.filter(item => item.category === category);
+        
+        // Update status text
+        const descEl = document.getElementById('filter-description');
+        if (category === 'all') {
+            descEl.innerText = "Showing all handpicked gourmet preparations";
+        } else {
+            descEl.innerText = `Displaying artisanal ${category} varieties`;
+        }
+
+        renderMenuItems(filtered);
+    }
+
+    function handleSearch(val) {
+        const query = val.toLowerCase().trim();
+        const filtered = MENU_ITEMS.filter(item => 
+            item.name.toLowerCase().includes(query) || 
+            item.desc.toLowerCase().includes(query) || 
+            item.category.toLowerCase().includes(query)
+        );
+        renderMenuItems(filtered);
+    }
+
+    // --- MODAL CUSTOMIZATION SYSTEM ---
+    function openCustomModal(itemId) {
+        const item = MENU_ITEMS.find(i => i.id === itemId);
+        if (!item) return;
+
+        currentSelectedItem = item;
+        selectedVariation = item.variations[0];
+        selectedExtras = [];
+
+        // Fill static metadata
+        document.getElementById('modal-item-image').src = item.img;
+        document.getElementById('modal-item-badge').innerText = item.badge;
+        document.getElementById('modal-item-name').innerText = item.name;
+        document.getElementById('modal-item-desc').innerText = item.desc;
+
+        // Populate variation radio choices
+        const variationContainer = document.getElementById('variation-options');
+        variationContainer.innerHTML = '';
+        item.variations.forEach((v, index) => {
+            const div = document.createElement('label');
+            div.className = "border border-bistro-dark/10 rounded-xl p-3 flex items-center justify-between cursor-pointer hover:bg-bistro-softOlive/40 transition-colors";
+            div.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <input type="radio" name="variation" value="${v.name}" ${index === 0 ? 'checked' : ''} onchange="selectVariation('${v.name}')" class="text-bistro-accent focus:ring-bistro-accent">
+                    <span class="text-xs font-semibold">${v.name}</span>
+                </div>
+                <span class="text-xs text-bistro-muted">+ $${v.priceDelta.toFixed(2)}</span>
+            `;
+            variationContainer.appendChild(div);
+        });
+
+        // Populate extra checkbox choices
+        const extrasContainer = document.getElementById('extra-options');
+        extrasContainer.innerHTML = '';
+        item.extras.forEach((ex) => {
+            const div = document.createElement('label');
+            div.className = "border border-bistro-dark/5 rounded-xl p-3 flex items-center justify-between cursor-pointer hover:bg-bistro-softOlive/40 transition-colors";
+            div.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <input type="checkbox" onchange="toggleExtra('${ex.name}')" class="rounded text-bistro-accent focus:ring-bistro-accent">
+                    <span class="text-xs font-medium">${ex.name}</span>
+                </div>
+                <span class="text-xs text-bistro-accent">+ $${ex.price.toFixed(2)}</span>
+            `;
+            extrasContainer.appendChild(div);
+        });
+
+        recalculateModalTotal();
+
+        // Reveal Animations
+        const modal = document.getElementById('custom-modal');
+        const content = document.getElementById('custom-modal-content');
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        content.classList.remove('scale-95');
+        content.classList.add('scale-100');
+    }
+
+    function closeCustomModal() {
+        const modal = document.getElementById('custom-modal');
+        const content = document.getElementById('custom-modal-content');
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        content.classList.remove('scale-100');
+        content.classList.add('scale-95');
+    }
+
+    function selectVariation(variationName) {
+        selectedVariation = currentSelectedItem.variations.find(v => v.name === variationName);
+        recalculateModalTotal();
+    }
+
+    function toggleExtra(extraName) {
+        const extra = currentSelectedItem.extras.find(ex => ex.name === extraName);
+        const index = selectedExtras.findIndex(e => e.name === extraName);
+
+        if (index > -1) {
+            selectedExtras.splice(index, 1);
+        } else {
+            selectedExtras.push(extra);
+        }
+        recalculateModalTotal();
+    }
+
+    function recalculateModalTotal() {
+        if (!currentSelectedItem) return;
+        let total = currentSelectedItem.price;
+        if (selectedVariation) {
+            total += selectedVariation.priceDelta;
+        }
+        selectedExtras.forEach(ex => {
+            total += ex.price;
+        });
+        document.getElementById('modal-total-price').innerText = `$${total.toFixed(2)}`;
+    }
+
+    // --- CART INTERACTIVE ACTIONS ---
+    function directAdd(name, price, category, img) {
+        // Find existing or mock temporary item structure
+        const targetId = 'direct-' + Date.now();
+        const customItem = {
+            id: targetId,
+            name: name,
+            price: price,
+            category: category,
+            img: img,
+            variation: { name: 'Artisan portion', priceDelta: 0 },
+            extras: [],
+            totalCost: price,
+            quantity: 1
+        };
+
+        addOrUpdateCart(customItem);
+        showToast(`Successfully added ${name} to your gourmet basket.`);
+    }
+
+    function commitToCart() {
+        if (!currentSelectedItem) return;
+
+        let totalCost = currentSelectedItem.price;
+        if (selectedVariation) totalCost += selectedVariation.priceDelta;
+        selectedExtras.forEach(ex => {
+            totalCost += ex.price;
+        });
+
+        const customizedCartItem = {
+            id: `${currentSelectedItem.id}-${selectedVariation.name}-${selectedExtras.map(e => e.name).sort().join('-')}`,
+            name: currentSelectedItem.name,
+            price: currentSelectedItem.price,
+            category: currentSelectedItem.category,
+            img: currentSelectedItem.img,
+            variation: selectedVariation,
+            extras: [...selectedExtras],
+            totalCost: totalCost,
+            quantity: 1
+        };
+
+        addOrUpdateCart(customizedCartItem);
+        closeCustomModal();
+        showToast(`${currentSelectedItem.name} Custom Curation Added!`);
+    }
+
+    function addOrUpdateCart(newItem) {
+        const existingIndex = cart.findIndex(item => item.id === newItem.id);
+        if (existingIndex > -1) {
+            cart[existingIndex].quantity += 1;
+        } else {
+            cart.push(newItem);
+        }
+        updateCartState();
+    }
+
+    function updateQuantity(id, action) {
+        const index = cart.findIndex(item => item.id === id);
+        if (index === -1) return;
+
+        if (action === 'increment') {
+            cart[index].quantity += 1;
+        } else if (action === 'decrement') {
+            cart[index].quantity -= 1;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+        }
+        updateCartState();
+    }
+
+    function updateCartState() {
+        const cartBadge = document.getElementById('cart-badge');
+        const drawerCount = document.getElementById('drawer-cart-count');
+        const emptyState = document.getElementById('empty-cart-state');
+        const pricingSection = document.getElementById('checkout-pricing');
+        const itemsContainer = document.getElementById('cart-items-container');
+
+        // Total count of elements
+        const totalItems = cart.reduce((acc, cur) => acc + cur.quantity, 0);
+        
+        // Handle badges and drawer stats
+        if (totalItems > 0) {
+            cartBadge.innerText = totalItems;
+            cartBadge.classList.remove('scale-0');
+            cartBadge.classList.add('scale-100');
+            drawerCount.innerText = totalItems;
+            emptyState.classList.add('hidden');
+            pricingSection.classList.remove('hidden');
+        } else {
+            cartBadge.classList.remove('scale-100');
+            cartBadge.classList.add('scale-0');
+            drawerCount.innerText = 0;
+            emptyState.classList.remove('hidden');
+            pricingSection.classList.add('hidden');
+        }
+
+        // Render Cart Items HTML
+        itemsContainer.innerHTML = '';
+        if (totalItems === 0) {
+            itemsContainer.appendChild(emptyState);
+        } else {
+            cart.forEach(item => {
+                const el = document.createElement('div');
+                el.className = "flex items-start space-x-4 bg-white p-4 rounded-2xl border border-bistro-dark/5 shadow-sm";
+                
+                let extrasHTML = '';
+                if (item.extras.length > 0) {
+                    extrasHTML = `<p class="text-[9px] text-bistro-accent font-medium leading-tight">Extras: ${item.extras.map(e => e.name).join(', ')}</p>`;
+                }
+
+                el.innerHTML = `
+                    <img src="${item.img}" class="w-16 h-16 rounded-xl object-cover shrink-0" onerror="this.onerror=null; this.src='https://placehold.co/100x100'">
+                    <div class="flex-grow space-y-1">
+                        <h4 class="font-serif font-bold text-xs text-bistro-dark">${item.name}</h4>
+                        <p class="text-[9px] text-bistro-muted">Portion: ${item.variation.name}</p>
+                        ${extrasHTML}
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="font-serif font-bold text-bistro-olive text-xs">$${(item.totalCost * item.quantity).toFixed(2)}</span>
+                            
+                            <!-- Quantity selector -->
+                            <div class="flex items-center space-x-2 bg-bistro-softOlive px-2 py-1 rounded-full text-[10px]">
+                                <button onclick="updateQuantity('${item.id}', 'decrement')" class="text-bistro-olive hover:text-bistro-accent"><i class="fa-solid fa-minus"></i></button>
+                                <span class="font-bold w-4 text-center">${item.quantity}</span>
+                                <button onclick="updateQuantity('${item.id}', 'increment')" class="text-bistro-olive hover:text-bistro-accent"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                itemsContainer.appendChild(el);
+            });
+        }
+
+        calculatePricingBreakdown();
+    }
+
+    // --- LEDGER BREAKDOWNS ---
+    function calculatePricingBreakdown() {
+        const subtotal = cart.reduce((acc, cur) => acc + (cur.totalCost * cur.quantity), 0);
+        let discount = 0;
+
+        if (isPromoApplied) {
+            discount = subtotal * 0.10;
+            document.getElementById('discount-row').classList.remove('hidden');
+            document.getElementById('discount-amount').innerText = `-$${discount.toFixed(2)}`;
+        } else {
+            document.getElementById('discount-row').classList.add('hidden');
+        }
+
+        // Sourcing & Delivery defaults to zero if basket empty
+        const shipping = subtotal > 0 ? 4.50 : 0.00;
+        const ecoFee = subtotal > 0 ? 1.50 : 0.00;
+        const grandTotal = subtotal - discount + shipping + ecoFee;
+
+        document.getElementById('subtotal-amount').innerText = `$${subtotal.toFixed(2)}`;
+        document.getElementById('shipping-amount').innerText = `$${shipping.toFixed(2)}`;
+        document.getElementById('eco-fee-amount').innerText = `$${ecoFee.toFixed(2)}`;
+        document.getElementById('grand-total-amount').innerText = `$${grandTotal.toFixed(2)}`;
+    }
+
+    function applyPromoCode() {
+        const input = document.getElementById('promo-input').value.toUpperCase().trim();
+        const msg = document.getElementById('promo-message');
+
+        if (input === 'BISTRO10') {
+            isPromoApplied = true;
+            msg.className = "text-[10px] font-medium text-green-600 block";
+            msg.innerText = "Sourdough Discount 10% Activated Successfully!";
+        } else {
+            isPromoApplied = false;
+            msg.className = "text-[10px] font-medium text-red-600 block";
+            msg.innerText = "Gourmet code invalid. Try 'BISTRO10'";
+        }
+        calculatePricingBreakdown();
+    }
+
+    // --- UI DRAWER CONTROLLERS ---
+    function toggleCartDrawer() {
+        const overlay = document.getElementById('cart-drawer-overlay');
+        const drawer = document.getElementById('cart-drawer');
+
+        if (drawer.classList.contains('translate-x-full')) {
+            drawer.classList.remove('translate-x-full');
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            overlay.classList.add('opacity-100');
+        } else {
+            drawer.classList.add('translate-x-full');
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            overlay.classList.remove('opacity-100');
+        }
+    }
+
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const icon = document.getElementById('mobile-menu-icon');
+        
+        if (menu.classList.contains('hidden')) {
+            menu.classList.remove('hidden');
+            icon.className = "fa-solid fa-xmark text-xl";
+        } else {
+            menu.classList.add('hidden');
+            icon.className = "fa-solid fa-bars text-xl";
+        }
+    }
+
+    // --- TOAST SYSTEM ---
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toast-message');
+        
+        toastMsg.innerText = message;
+        toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+        
+        setTimeout(() => {
+            toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        }, 4000);
+    }
+
+    // --- MOCK CHECKOUT FLOW ---
+    function openCheckoutFlow() {
+        // Toggle the drawer first
+        toggleCartDrawer();
+
+        const grandTotal = document.getElementById('grand-total-amount').innerText;
+        document.getElementById('receipt-total').innerText = grandTotal;
+
+        // Generate mock unique Order ID
+        const orderRef = "ART-" + Math.floor(Math.random() * 900000 + 100000);
+        document.getElementById('receipt-ref').innerText = `#${orderRef}`;
+
+        // Reveal checkout success modal
+        const checkModal = document.getElementById('checkout-modal');
+        const checkContent = document.getElementById('checkout-modal-content');
+
+        checkModal.classList.remove('opacity-0', 'pointer-events-none');
+        checkContent.classList.remove('scale-95');
+        checkContent.classList.add('scale-100');
+    }
+
+    function closeCheckoutModal() {
+        // Reset everything
+        cart = [];
+        isPromoApplied = false;
+        document.getElementById('promo-input').value = '';
+        document.getElementById('promo-message').classList.add('hidden');
+        updateCartState();
+
+        const checkModal = document.getElementById('checkout-modal');
+        const checkContent = document.getElementById('checkout-modal-content');
+
+        checkModal.classList.add('opacity-0', 'pointer-events-none');
+        checkContent.classList.remove('scale-100');
+        checkContent.classList.add('scale-95');
+
+        showToast("Enjoyed your premium reservation at L'Artisan!");
+    }
+
+    function handleSubscribe(e) {
+        e.preventDefault();
+        showToast("Welcome to the Atelier Inner Circle! Exclusive tasting invitations sent.");
+        e.target.reset();
+    }
+</script>
+
+</body>
+</html>
