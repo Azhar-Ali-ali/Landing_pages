@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poliform Studio & Contract — Editorial Architecture</title>
+  
+  <!-- Premium Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            cinzel: ['Cinzel', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom premium styling for native range sliders */
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #f97316; /* Tailwind orange-500 */
+      cursor: ew-resize;
+      transition: transform 0.1s ease;
+      border: 2px solid white;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border: 2px solid white;
+      border-radius: 50%;
+      background: #f97316;
+      cursor: ew-resize;
+      transition: transform 0.1s ease;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+    input[type="range"]::-moz-range-thumb:hover {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body class="bg-[#FAF8F5] text-[#1c1b1a] font-sans antialiased selection:bg-[#EBE6E0] selection:text-black relative overflow-x-hidden transition-colors duration-1000">
+
+  <!-- Interactive Drafting Grid Overlay -->
+  <div id="drafting-grid" class="absolute inset-0 pointer-events-none z-40 overflow-hidden hidden">
+    <div class="w-full h-full opacity-[0.06] border-t border-b border-dashed border-red-500 absolute top-1/4"></div>
+    <div class="w-full h-full opacity-[0.06] border-t border-b border-dashed border-red-500 absolute top-2/4"></div>
+    <div class="w-full h-full opacity-[0.06] border-t border-b border-dashed border-red-500 absolute top-3/4"></div>
+    <div class="h-full w-px opacity-[0.06] border-l border-dashed border-red-500 absolute left-1/4"></div>
+    <div class="h-full w-px opacity-[0.06] border-l border-dashed border-red-500 absolute left-2/4"></div>
+    <div class="h-full w-px opacity-[0.06] border-l border-dashed border-red-500 absolute left-3/4"></div>
+    
+    <!-- Tracking coordinates badge -->
+    <div class="fixed bottom-10 right-10 bg-red-500/10 border border-red-500/30 text-red-600 font-mono text-[9px] px-3 py-1.5 rounded-md backdrop-blur-md">
+      DRAFT_MODE // FOCUS_COORDS: X=<span id="coord-x">0.00</span>% Y=<span id="coord-y">0.00</span>%
+    </div>
+  </div>
+
+  <!-- Top Sensory Menu Bar -->
+  <div id="top-bar" class="border-b border-[#EBE6E0] dark:border-neutral-800 py-3.5 px-6 text-xs flex justify-between items-center tracking-[0.2em] uppercase font-semibold">
+    <div class="flex items-center gap-4">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span class="hidden sm:inline">POLIFORM ARTISAN REGISTRY // MILAN HQ</span>
+    </div>
+    <div class="flex items-center gap-6 text-[#1c1b1a] dark:text-[#EBE6E0]">
+      
+      <!-- Toggle Grid -->
+      <button id="btn-toggle-grid" class="flex items-center gap-2 hover:opacity-75 transition-all text-xs focus:outline-none" title="Toggle interactive alignment guides">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v16.5m0-16.5h16.5m-16.5 0L21 21M12 3v18M3 12h18" />
+        </svg>
+        <span id="grid-status-text" class="text-[10px] hidden md:inline">SHOW GRID</span>
+      </button>
+      
+      <!-- Sound Ambiance -->
+      <button id="btn-toggle-sound" class="flex items-center gap-2 hover:opacity-75 transition-all text-xs focus:outline-none" title="Spatially synthesized sound environment">
+        <svg id="volume-icon-muted" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6L4.5 9H1.5v6h3l4.5 3.75V5.25z" />
+        </svg>
+        <svg id="volume-icon-playing" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+        </svg>
+        <span id="audio-status-text" class="text-[10px] hidden md:inline">PLAY CHORAL</span>
+      </button>
+
+      <!-- Theme Switch -->
+      <button id="btn-toggle-theme" class="border border-current px-2.5 py-1 rounded text-[10px] tracking-widest hover:bg-current hover:text-white dark:hover:text-black transition-all">
+        OBSIDIAN NOIR
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Structural Outer Box Frame -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+    
+    <!-- Editorial Container with Fine Border detailing -->
+    <div id="main-frame" class="border border-[#EBE6E0] dark:border-neutral-800 bg-white dark:bg-[#161616] rounded-[32px] p-4 sm:p-8 shadow-2xl relative transition-all duration-700">
+      
+      <!-- Decorative Corner Labels -->
+      <div class="absolute top-4 left-4 text-[9px] font-mono opacity-25 tracking-widest hidden lg:block uppercase">SYS_SCALE: 1:12.5</div>
+      <div class="absolute top-4 right-4 text-[9px] font-mono opacity-25 tracking-widest hidden lg:block uppercase">COORDS: LAT_MILAN // LN_32</div>
+
+      <!-- Header -->
+      <header class="flex justify-between items-end pb-8 border-b border-[#F8F5F2] dark:border-neutral-800">
+        <div>
+          <a href="#" class="font-cinzel text-3xl sm:text-4xl font-normal tracking-[0.15em] hover:opacity-80 transition-opacity block">
+            Poliform
+          </a>
+          <span class="text-[10px] tracking-[0.25em] uppercase font-bold text-[#8E8A84] dark:text-neutral-500">
+            Architecture &amp; General Contracting
+          </span>
+        </div>
+        
+        <nav class="hidden md:flex items-center space-x-8 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1c1b1a] dark:text-[#EBE6E0]">
+          <a href="#before-after" class="hover:opacity-75 transition-opacity">Framework</a>
+          <a href="#concept-board" class="hover:opacity-75 transition-opacity">Concept Board</a>
+          <a href="#planner" class="hover:opacity-75 transition-opacity">Planner</a>
+          <a href="#atelier" class="hover:opacity-75 transition-opacity">Atelier</a>
+          <a href="#contact" class="px-5 py-2.5 rounded-full transition-all border border-[#EBE6E0] dark:border-neutral-700 hover:bg-black hover:text-white hover:border-black dark:hover:bg-white dark:hover:text-black">
+            Draft Brief
+          </a>
+        </nav>
+      </header>
+
+      <!-- Hero Section -->
+      <section class="pt-10 pb-16">
+        <div class="relative rounded-3xl overflow-hidden aspect-[16/10] md:aspect-[21/9] flex items-center justify-center p-6 md:p-12">
+          
+          <!-- Backing Image Blend -->
+          <div class="absolute inset-0 z-0">
+            <img 
+              src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1920&q=85" 
+              alt="Atelier Space" 
+              class="w-full h-full object-cover opacity-55 mix-blend-luminosity scale-100 hover:scale-105 transition-transform duration-[4000ms] ease-out"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30"></div>
+          </div>
+
+          <!-- Overlay Layout representing image.png -->
+          <div class="relative z-10 w-full h-full flex flex-col justify-between">
+            
+            <!-- Upper Status Tag -->
+            <div class="self-start">
+              <span class="bg-white/10 backdrop-blur-md text-white text-[9px] tracking-[0.25em] uppercase px-4 py-2 rounded-full font-bold border border-white/15">
+                ARCHIVAL CATALOGUE // ATELIER MILANO
+              </span>
+            </div>
+
+            <!-- Monumental Hero Headline -->
+            <div class="my-auto text-center md:text-left">
+              <h1 class="font-cinzel text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-white tracking-[0.1em] uppercase leading-none drop-shadow-2xl select-none">
+                Sartorial
+              </h1>
+            </div>
+
+            <!-- Bottom Badge & Description -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-4">
+              
+              <!-- Floating Glass Description Card -->
+              <div class="bg-black/50 backdrop-blur-xl border border-white/10 p-6 rounded-2xl max-w-sm text-white shadow-2xl relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-1 h-full bg-orange-500"></div>
+                <p class="text-[11px] text-neutral-300 leading-relaxed mb-4 pl-2 tracking-wide">
+                  Translating structural honesty into bespoke sensory luxury. We execute residential masterpiece builds controlling masonry, engineering, and fine bespoke cabinetry.
+                </p>
+                
+                <!-- Interactive Play Video -->
+                <div class="flex items-center gap-3 pl-2">
+                  <button 
+                    onclick="openVideoModal()"
+                    class="w-11 h-11 rounded-full bg-white text-black flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xl font-bold focus:outline-none"
+                  >
+                    <svg class="w-5 h-5 text-black fill-current" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                  <div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-white block">VIEW DOCUMENTARY</span>
+                    <span class="text-[8px] font-mono text-neutral-400">CHOPIN ATELIER DIALOGUES (2:40)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Circular Rotating Badge -->
+              <div class="hidden lg:flex items-center justify-center relative self-end mr-4">
+                <div class="animate-[spin_24s_linear_infinite] w-28 h-28 flex items-center justify-center">
+                  <svg viewBox="0 0 100 100" class="w-full h-full fill-white">
+                    <path id="circlePath" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" fill="none" />
+                    <text class="font-sans text-[7px] uppercase tracking-[4px] fill-white/80 font-bold">
+                      <textPath href="#circlePath">• POLIFORM CONTRACTING • EXCELLENCE</textPath>
+                    </text>
+                  </svg>
+                </div>
+                <div class="absolute text-white font-cinzel text-lg font-light">P</div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Before/After Structural Slider Section -->
+      <section id="before-after" class="py-12 border-t border-b border-[#EBE6E0]/40 dark:border-neutral-800 my-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <div class="lg:col-span-4">
+            <span class="text-[9px] uppercase tracking-[0.2em] font-bold text-orange-500 block mb-2">// CONTRACTING INTEGRITY</span>
+            <h3 class="font-cinzel text-2xl sm:text-3xl font-normal tracking-wider mb-4 dark:text-white">
+              From Raw Concrete to Pure Serenity
+            </h3>
+            <p class="text-xs text-[#8E8A84] dark:text-neutral-400 leading-relaxed mb-6">
+              Unlike conventional interior architects, we start at the structural foundation. Drag the interactive split bar to witness our master masonry evolve into flawless custom wood panel detailing.
+            </p>
+            <div class="flex gap-4 items-center">
+              <div class="border border-[#1c1b1a] dark:border-[#EBE6E0] px-3 py-1 text-[10px] font-mono tracking-widest uppercase rounded text-[#1c1b1a] dark:text-[#EBE6E0]">
+                Phase 01: Steel Core
+              </div>
+              <span class="text-xs opacity-40 dark:text-white">→</span>
+              <div class="border border-[#1c1b1a] dark:border-[#EBE6E0] px-3 py-1 text-[10px] font-mono tracking-widest uppercase rounded text-[#1c1b1a] dark:text-[#EBE6E0]">
+                Phase 05: Millwork
+              </div>
+            </div>
+          </div>
+
+          <!-- Slider Container -->
+          <div class="lg:col-span-8 relative rounded-2xl overflow-hidden aspect-[16/9] border border-neutral-300 dark:border-neutral-800 group select-none">
+            
+            <!-- Structural Base Frame -->
+            <div class="absolute inset-0 bg-neutral-900">
+              <img 
+                src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80" 
+                alt="Raw Framing Structure"
+                class="w-full h-full object-cover opacity-50 mix-blend-luminosity grayscale"
+              />
+              <div class="absolute bottom-4 left-4 bg-black/80 text-white text-[9px] font-mono tracking-widest px-3 py-1.5 rounded uppercase">
+                Structural Frame: Concrete Cantilever
+              </div>
+            </div>
+
+            <!-- Finished Space (Width driven dynamically by slider input) -->
+            <div id="after-image-wrapper" class="absolute inset-0 overflow-hidden" style="width: 50%;">
+              <div class="absolute inset-0 w-full h-full min-w-[300px]" style="width: 100vw; max-width: 1200px;">
+                <img 
+                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" 
+                  alt="Completed Space"
+                  class="w-full h-full object-cover"
+                />
+                <div class="absolute bottom-4 left-4 bg-orange-600 text-white text-[9px] font-mono tracking-widest px-3 py-1.5 rounded uppercase whitespace-nowrap">
+                  Completed: Hand-applied Travertine Casing
+                </div>
+              </div>
+            </div>
+
+            <!-- Range input slider overlay -->
+            <input 
+              type="range" 
+              min="0" 
+              max="100" 
+              value="50" 
+              id="slider-bar" 
+              class="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30"
+              oninput="handleSliderChange(this.value)"
+            />
+
+            <!-- Split Line indicator -->
+            <div id="split-indicator" class="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg pointer-events-none z-20" style="left: 50%;">
+              <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-bold shadow-2xl text-[10px]">
+                ↔
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Tactile Material Board Selection Section -->
+      <section id="concept-board" class="py-16">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-orange-500 block mb-2">// BESPOKE SENSORY ATELIER</span>
+          <h2 class="font-cinzel text-3xl sm:text-4xl font-normal tracking-wide dark:text-white">
+            Interactive Material Board
+          </h2>
+          <p class="text-xs text-[#8E8A84] dark:text-neutral-400 mt-2">
+            Click a material palette direction to dynamically test how primary finishes harmonize ambient light reflections.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          
+          <!-- Left Control Panel -->
+          <div class="lg:col-span-5 flex flex-col justify-between border border-[#EBE6E0] dark:border-neutral-800 bg-[#FAF8F5] dark:bg-neutral-900/40 rounded-2xl p-6 sm:p-8">
+            <div>
+              
+              <!-- Tab Triggers -->
+              <div class="flex gap-2.5 mb-8">
+                <button 
+                  onclick="selectPalette('travertine')" 
+                  id="tab-travertine"
+                  class="px-4 py-2 text-[10px] uppercase tracking-wider font-semibold rounded transition-all bg-black text-white shadow-lg"
+                >
+                  Travertine
+                </button>
+                <button 
+                  onclick="selectPalette('eucalyptus')" 
+                  id="tab-eucalyptus"
+                  class="px-4 py-2 text-[10px] uppercase tracking-wider font-semibold rounded transition-all bg-white text-neutral-500 dark:bg-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100"
+                >
+                  Eucalyptus
+                </button>
+                <button 
+                  onclick="selectPalette('bronze')" 
+                  id="tab-bronze"
+                  class="px-4 py-2 text-[10px] uppercase tracking-wider font-semibold rounded transition-all bg-white text-neutral-500 dark:bg-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100"
+                >
+                  Bronze
+                </button>
+              </div>
+
+              <!-- Palette Specific Content -->
+              <h3 id="palette-title" class="font-cinzel text-2xl font-semibold mb-2 dark:text-white">Travertine Classic</h3>
+              <span id="palette-location" class="text-[10px] uppercase tracking-widest font-bold text-neutral-400 block mb-4">
+                Extraction Zone: Tuscany Quarry, Italy
+              </span>
+              
+              <p id="palette-concept" class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed italic mb-8">
+                "Warm, porous limestone textures combined with sand-drifted light oak and raw parchment accents."
+              </p>
+
+              <!-- Curated Finish Details list -->
+              <div class="mb-6">
+                <span class="text-[9px] uppercase tracking-wider font-bold text-neutral-400 block mb-3">
+                  Finishes Specification Sheet
+                </span>
+                <ul id="palette-finishes" class="space-y-2 dark:text-neutral-300">
+                  <!-- Injected via JavaScript -->
+                </ul>
+              </div>
+            </div>
+
+            <!-- Reflective Contrast Spectrum bar -->
+            <div>
+              <span class="text-[9px] uppercase tracking-wider font-bold text-neutral-400 block mb-3">
+                Reflective Contrast Spectrum
+              </span>
+              <div class="flex rounded overflow-hidden h-10 border border-neutral-300 dark:border-neutral-800">
+                <div id="palette-color-block" class="flex-1 transition-all" style="background-color: #EFECE6;"></div>
+                <div class="flex-1 bg-neutral-800"></div>
+                <div class="flex-1 bg-amber-900/30"></div>
+                <div class="flex-1 bg-amber-50"></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Image Container -->
+          <div class="lg:col-span-7 relative rounded-2xl overflow-hidden min-h-[350px] lg:min-h-full border border-neutral-300 dark:border-neutral-800 flex items-end">
+            <img 
+              id="palette-image"
+              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80" 
+              alt="Material Board Sample" 
+              class="absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out"
+            />
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
+            <div id="palette-ref-tag" class="absolute top-4 right-4 bg-white/10 backdrop-blur-md px-3 py-1.5 text-[9px] tracking-widest uppercase rounded text-white font-mono border border-white/20">
+              REF_SAMPLE_ID // TRAVERTINE_CLASSIC
+            </div>
+
+            <!-- Overlapping Detail Card -->
+            <div class="relative z-10 p-6 sm:p-8 text-white w-full">
+              <div class="bg-black/65 backdrop-blur-md border border-white/10 p-5 rounded-xl flex flex-col sm:flex-row justify-between sm:items-center gap-4 max-w-lg">
+                <div>
+                  <span class="text-[8px] uppercase tracking-[0.2em] text-neutral-300 font-bold">PREMIUM ARCHITECTURAL DRAFT</span>
+                  <p class="text-xs font-semibold tracking-wide text-white mt-1">
+                    Inquire regarding custom wood grain matching or direct stone-quarry sourcing.
+                  </p>
+                </div>
+                <button 
+                  onclick="applyPaletteToBrief()" 
+                  class="px-4 py-2.5 bg-white text-black text-[10px] font-bold uppercase rounded hover:bg-neutral-200 transition-colors self-start sm:self-center whitespace-nowrap tracking-wider"
+                >
+                  REQUEST BRIEF
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Pricing Estimation Instrument Section -->
+      <section id="planner" class="py-16 bg-[#FBF9F6] dark:bg-neutral-900 rounded-3xl border border-neutral-200 dark:border-neutral-800 p-6 sm:p-10 my-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <!-- Controls Panel -->
+          <div class="lg:col-span-7">
+            <span class="text-[9px] uppercase tracking-[0.2em] font-bold text-orange-500 block mb-2">// BLUEPRINT ESTIMATOR</span>
+            <h2 class="font-cinzel text-3xl font-normal text-black dark:text-white mb-4">
+              Sartorial Contracting Calculator
+            </h2>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-8 max-w-xl leading-relaxed">
+              Adjust targets to build a clear, coordinate-mapped cost projection for your custom estate. We handle absolute site development, municipal code filing, and interior handiwork.
+            </p>
+
+            <!-- Dynamic Slider Area Size -->
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-[11px] font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-300">
+                  Target Building Area:
+                </label>
+                <span class="text-xs font-bold font-mono bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 px-3 py-1 rounded dark:text-white">
+                  <span id="display-area">3,800</span> sq ft / <span id="display-metric-area">353</span> m²
+                </span>
+              </div>
+              <input 
+                type="range" 
+                min="1500" 
+                max="10000" 
+                step="250"
+                value="3800" 
+                id="calc-area-slider" 
+                class="w-full accent-black cursor-pointer bg-neutral-300 dark:bg-neutral-700 rounded-lg h-1.5"
+                oninput="updateCalculation()"
+              />
+              <div class="flex justify-between text-[9px] opacity-40 dark:text-white mt-1 font-mono">
+                <span>1,500 sq ft</span>
+                <span>5,500 sq ft</span>
+                <span>10,000 sq ft</span>
+              </div>
+            </div>
+
+            <!-- Quality Spec Selector Tab Group -->
+            <div class="mb-8">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-300 block mb-3">
+                Finish Specification Class
+              </span>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <button
+                  type="button"
+                  id="spec-basic"
+                  onclick="setMaterialGrade('basic')"
+                  class="p-4 rounded-xl text-left border border-neutral-200 dark:border-neutral-700 bg-white/40 dark:bg-neutral-800/40 hover:bg-white dark:hover:bg-neutral-800 transition-all"
+                >
+                  <span class="block text-[10px] font-bold uppercase tracking-widest text-black dark:text-white">Premium Basic</span>
+                  <span class="block text-[9px] opacity-60 dark:text-neutral-300 mt-1.5">Classic quarry materials, natural linens, energy-efficient floor plans.</span>
+                </button>
+
+                <button
+                  type="button"
+                  id="spec-curated"
+                  onclick="setMaterialGrade('curated')"
+                  class="p-4 rounded-xl text-left border border-orange-500 bg-white dark:bg-black shadow-md ring-1 ring-orange-500 transition-all"
+                >
+                  <span class="block text-[10px] font-bold uppercase tracking-widest text-black dark:text-white">Curated Artistry</span>
+                  <span class="block text-[9px] opacity-60 dark:text-neutral-300 mt-1.5">High-ceiling steel frames, bookmatched marble, tailored millwork packages.</span>
+                </button>
+
+                <button
+                  type="button"
+                  id="spec-museum"
+                  onclick="setMaterialGrade('museum')"
+                  class="p-4 rounded-xl text-left border border-neutral-200 dark:border-neutral-700 bg-white/40 dark:bg-neutral-800/40 hover:bg-white dark:hover:bg-neutral-800 transition-all"
+                >
+                  <span class="block text-[10px] font-bold uppercase tracking-widest text-black dark:text-white">Museum-Grade Monolith</span>
+                  <span class="block text-[9px] opacity-60 dark:text-neutral-300 mt-1.5">Unrestricted seismic reinforcement, custom structural concrete curves, complete master builder seal.</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Dynamic Additional Addons list -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <label class="flex items-center gap-3 p-3 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-900 select-none">
+                <input 
+                  type="checkbox" 
+                  id="addon-smart" 
+                  checked 
+                  class="w-4 h-4 accent-black rounded"
+                  onchange="updateCalculation()"
+                />
+                <div class="dark:text-white">
+                  <span class="block text-[11px] font-semibold">Sensor Control Automation</span>
+                  <span class="block text-[8px] opacity-50">Lutron Palladiom integration</span>
+                </div>
+              </label>
+
+              <label class="flex items-center gap-3 p-3 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-900 select-none">
+                <input 
+                  type="checkbox" 
+                  id="addon-geothermal" 
+                  class="w-4 h-4 accent-black rounded"
+                  onchange="updateCalculation()"
+                />
+                <div class="dark:text-white">
+                  <span class="block text-[11px] font-semibold">Geothermal Loop HVAC</span>
+                  <span class="block text-[8px] opacity-50">Subsurface thermal management</span>
+                </div>
+              </label>
+
+              <label class="flex items-center gap-3 p-3 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-900 select-none">
+                <input 
+                  type="checkbox" 
+                  id="addon-artistry" 
+                  checked 
+                  class="w-4 h-4 accent-black rounded"
+                  onchange="updateCalculation()"
+                />
+                <div class="dark:text-white">
+                  <span class="block text-[11px] font-semibold">Atelier Stonework</span>
+                  <span class="block text-[8px] opacity-50">Integrated bathroom vanity carving</span>
+                </div>
+              </label>
+            </div>
+
+          </div>
+
+          <!-- Summary Side Panel -->
+          <div class="lg:col-span-5 bg-[#1C1B1A] text-[#FDFCFB] p-6 sm:p-8 rounded-2xl flex flex-col justify-between h-full shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-orange-600/10 blur-3xl rounded-full"></div>
+            <div>
+              <span class="text-[9px] uppercase tracking-[0.22em] text-[#A59F97] font-bold block mb-1">
+                PROJECT FINANCIAL ENVELOPE
+              </span>
+              <div id="display-total-estimate" class="text-4xl sm:text-5xl font-cinzel text-white font-light tracking-wide py-4 border-b border-white/10">
+                $2,165,000
+              </div>
+              <div class="py-6 space-y-3.5 text-xs text-[#BCB7B1]">
+                <div class="flex justify-between">
+                  <span>Basic framing structural cost:</span>
+                  <span id="breakdown-basic" class="font-mono text-white">$1,710,000</span>
+                </div>
+                <div id="breakdown-smart-row" class="flex justify-between">
+                  <span>Lutron automation deployment:</span>
+                  <span id="breakdown-smart" class="font-mono text-white">$171,000</span>
+                </div>
+                <div id="breakdown-geothermal-row" class="flex justify-between hidden">
+                  <span>Geothermal loop installation:</span>
+                  <span id="breakdown-geothermal" class="font-mono text-white">$85,000</span>
+                </div>
+                <div id="breakdown-artistry-row" class="flex justify-between">
+                  <span>Custom stonework sculpts:</span>
+                  <span id="breakdown-artistry" class="font-mono text-white">$285,000</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-6 mt-6">
+              <p class="text-[9px] text-[#9D9790] leading-relaxed mb-4 font-mono">
+                *Draft estimations represent guaranteed maximum pricing models based on local construction metrics.
+              </p>
+              <button 
+                onclick="applyEstimateToBrief()" 
+                class="w-full block text-center py-3.5 bg-white text-black hover:bg-neutral-200 transition-colors font-bold uppercase text-[10px] tracking-[0.2em] rounded-lg"
+              >
+                LOCK PROPOSALS &amp; TRANSMIT
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Archival Works Showcase Grid -->
+      <section id="atelier" class="py-16">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-12 gap-4">
+          <div>
+            <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-orange-500 block mb-2">// PORTFOLIO MONOLITHS</span>
+            <h2 class="font-cinzel text-3xl sm:text-4xl font-normal text-black dark:text-white">
+              Archival Construction Records
+            </h2>
+          </div>
+          <div class="text-xs opacity-60 uppercase tracking-[0.15em] font-mono dark:text-neutral-400">
+            MILANO DESIGN WEEK // EST. 2012
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- Card 1 -->
+          <div class="group rounded-2xl overflow-hidden border border-[#F8F5F2] dark:border-neutral-800 bg-white dark:bg-black transition-all hover:shadow-2xl flex flex-col justify-between">
+            <div class="relative overflow-hidden aspect-[4/3] bg-neutral-100">
+              <img 
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80" 
+                alt="La Cabaña Monolith" 
+                class="w-full h-full object-cover group-hover:scale-105 transition-all duration-[2000ms] ease-out"
+              />
+              <div class="absolute top-4 left-4 bg-black/80 text-white text-[8px] font-mono tracking-widest uppercase px-3 py-1.5 rounded">
+                01 // Off-Grid Brutalist
+              </div>
+            </div>
+            
+            <div class="p-6">
+              <span class="text-[9px] opacity-50 font-mono tracking-widest block mb-1 dark:text-neutral-400">46.1024° N, 7.9201° E</span>
+              <h4 class="font-cinzel text-lg text-black dark:text-white tracking-wide group-hover:text-orange-500 transition-colors">
+                La Cabaña Monolith
+              </h4>
+              <div class="flex justify-between items-center text-[10px] mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-800 opacity-70 font-mono dark:text-neutral-300">
+                <span>3,400 sqft / Cantilevered Pour</span>
+                <span>GEN_CON // OK</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="group rounded-2xl overflow-hidden border border-[#F8F5F2] dark:border-neutral-800 bg-white dark:bg-black transition-all hover:shadow-2xl flex flex-col justify-between">
+            <div class="relative overflow-hidden aspect-[4/3] bg-neutral-100">
+              <img 
+                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" 
+                alt="The Courtyard Conservatory" 
+                class="w-full h-full object-cover group-hover:scale-105 transition-all duration-[2000ms] ease-out"
+              />
+              <div class="absolute top-4 left-4 bg-black/80 text-white text-[8px] font-mono tracking-widest uppercase px-3 py-1.5 rounded">
+                02 // Japandi Glasswork
+              </div>
+            </div>
+            
+            <div class="p-6">
+              <span class="text-[9px] opacity-50 font-mono tracking-widest block mb-1 dark:text-neutral-400">35.6762° N, 139.6503° E</span>
+              <h4 class="font-cinzel text-lg text-black dark:text-white tracking-wide group-hover:text-orange-500 transition-colors">
+                The Courtyard Conservatory
+              </h4>
+              <div class="flex justify-between items-center text-[10px] mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-800 opacity-70 font-mono dark:text-neutral-300">
+                <span>4,800 sqft / Interior Forest</span>
+                <span>GEN_CON // OK</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="group rounded-2xl overflow-hidden border border-[#F8F5F2] dark:border-neutral-800 bg-white dark:bg-black transition-all hover:shadow-2xl flex flex-col justify-between">
+            <div class="relative overflow-hidden aspect-[4/3] bg-neutral-100">
+              <img 
+                src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80" 
+                alt="Atelier de Lumière" 
+                class="w-full h-full object-cover group-hover:scale-105 transition-all duration-[2000ms] ease-out"
+              />
+              <div class="absolute top-4 left-4 bg-black/80 text-white text-[8px] font-mono tracking-widest uppercase px-3 py-1.5 rounded">
+                03 // Urban Minimalist
+              </div>
+            </div>
+            
+            <div class="p-6">
+              <span class="text-[9px] opacity-50 font-mono tracking-widest block mb-1 dark:text-neutral-400">48.8566° N, 2.3522° E</span>
+              <h4 class="font-cinzel text-lg text-black dark:text-white tracking-wide group-hover:text-orange-500 transition-colors">
+                Atelier de Lumière
+              </h4>
+              <div class="flex justify-between items-center text-[10px] mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-800 opacity-70 font-mono dark:text-neutral-300">
+                <span>2,100 sqft / Restored Brick</span>
+                <span>GEN_CON // OK</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Editorial Large Quote Section -->
+      <section class="py-16 bg-neutral-900 text-white rounded-3xl my-10 relative overflow-hidden px-8">
+        <div class="absolute -right-12 -bottom-16 text-[180px] text-white/5 font-serif select-none pointer-events-none">“</div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+          <span class="text-[9px] uppercase tracking-[0.25em] font-bold text-orange-400 block mb-4">COGNITIVE LIVING DESIGN</span>
+          <p class="font-cinzel text-xl sm:text-3xl italic leading-relaxed text-[#FAF8F5] mb-8 font-light">
+            "Our contemporary shelter is more than an arrangement of brick and structural beams; it acts as a dynamic mirror to human clarity, focusing daylight where memory occurs."
+          </p>
+          <div class="flex items-center justify-center gap-3">
+            <span class="h-px w-8 bg-orange-400"></span>
+            <span class="text-[10px] uppercase tracking-[0.2em] font-bold">MILAN CHOPIN ATELIER DIALOGUES</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Project Submission & Brief section -->
+      <section id="contact" class="py-16">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          <div class="lg:col-span-5">
+            <span class="text-[9px] uppercase tracking-[0.2em] font-bold text-orange-500 block mb-2">// INITIATE ATELIER ENGAGEMENT</span>
+            <h2 class="font-cinzel text-3xl sm:text-4xl font-normal text-black dark:text-white mb-6">
+              Begin Your Architectural Journey
+            </h2>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed mb-8">
+              We coordinates project builds globally. Share your target dimensions, material expectations, or raw site characteristics. Our principal architect is responsive for brief analysis.
+            </p>
+
+            <div class="space-y-6 text-xs text-neutral-600 dark:text-neutral-300">
+              <div>
+                <span class="font-bold uppercase tracking-widest block opacity-40 mb-1">EUROPEAN ATELIER HUB</span>
+                <p class="text-sm font-medium">Corso Garibaldi 99, Milan, Lombardia, Italy</p>
+              </div>
+              <div>
+                <span class="font-bold uppercase tracking-widest block opacity-40 mb-1">INTELLIGENT SECURE CALL</span>
+                <p class="text-sm font-medium">+39 (02) 8904-8811</p>
+              </div>
+              <div>
+                <span class="font-bold uppercase tracking-widest block opacity-40 mb-1">CORRESPONDENCE PROTOCOLS</span>
+                <p class="text-sm font-medium">studio@poliform-luxuryarchitects.com</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Dynamic Form Block -->
+          <div id="brief-box" class="lg:col-span-7 border border-[#EBE6E0] dark:border-neutral-800 bg-white dark:bg-black/30 rounded-2xl p-6 sm:p-10 shadow-lg transition-all">
+            
+            <form id="project-brief-form" onsubmit="handleBriefSubmit(event)" class="space-y-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 dark:text-white mb-2">Artisan/User Identification</label>
+                  <input 
+                    type="text" 
+                    id="form-name"
+                    required
+                    placeholder="Alexandra Sterling"
+                    class="w-full px-4 py-3.5 bg-[#FAF8F5] dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded text-sm focus:outline-none focus:border-orange-500 dark:text-white transition-all"
+                  />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 dark:text-white mb-2">Atelier Secure Email</label>
+                  <input 
+                    type="email" 
+                    id="form-email"
+                    required
+                    placeholder="sterling@luxuryestate.com"
+                    class="w-full px-4 py-3.5 bg-[#FAF8F5] dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded text-sm focus:outline-none focus:border-orange-500 dark:text-white transition-all"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 dark:text-white mb-2">Curated Texture Preference</label>
+                  <select 
+                    id="form-palette"
+                    class="w-full px-4 py-3.5 bg-[#FAF8F5] dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded text-sm focus:outline-none focus:border-orange-500 dark:text-white transition-all"
+                  >
+                    <option value="Travertine Classic">Travertine Classic</option>
+                    <option value="Smoked Eucalyptus">Smoked Eucalyptus</option>
+                    <option value="Patinated Bronze">Patinated Bronze</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 dark:text-white mb-2">Project Classification</label>
+                  <select class="w-full px-4 py-3.5 bg-[#FAF8F5] dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded text-sm focus:outline-none focus:border-orange-500 dark:text-white transition-all">
+                    <option>Custom Architectural Estate</option>
+                    <option>Urban Penthouse Restructuring</option>
+                    <option>Modern Gallery Atelier</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[10px] font-bold uppercase tracking-wider opacity-60 dark:text-white mb-2">Structural Requirements &amp; Spatial Desires</label>
+                <textarea 
+                  id="form-message"
+                  rows="4"
+                  placeholder="State any specific parameters (e.g. hillside slope, floor-to-ceiling glass systems, custom travertine details)..."
+                  class="w-full px-4 py-3.5 bg-[#FAF8F5] dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded text-sm focus:outline-none focus:border-orange-500 dark:text-white transition-all"
+                ></textarea>
+              </div>
+
+              <button 
+                type="submit"
+                class="w-full py-4 bg-black text-white dark:bg-white dark:text-black font-bold uppercase text-[10px] tracking-[0.2em] rounded hover:opacity-85 transition-opacity shadow-lg"
+              >
+                TRANSMIT DIGITAL PROJECT BRIEF
+              </button>
+            </form>
+
+            <!-- Success State (Hidden by default) -->
+            <div id="brief-success" class="text-center py-12 hidden">
+              <div class="w-16 h-16 bg-[#FBF9F6] text-black dark:bg-neutral-800 dark:text-white rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+              </div>
+              <h3 class="font-cinzel text-2xl text-black dark:text-white mb-2">Proposal Draft Received</h3>
+              <p class="text-xs text-neutral-500 dark:text-neutral-400 max-w-md mx-auto mb-6 leading-relaxed">
+                Your master structural project coordinate sheet has been logged. Our design principal will address structural permits and schedule direct consultation.
+              </p>
+              <button 
+                onclick="resetBriefForm()"
+                class="px-6 py-3 bg-black text-white dark:bg-white dark:text-black rounded text-[10px] font-bold uppercase tracking-[0.2em] hover:opacity-80 transition-opacity"
+              >
+                DRAFT ADDITIONAL PROJECT
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="pt-12 mt-12 border-t border-neutral-100 dark:border-neutral-800 flex flex-col sm:flex-row justify-between items-center text-[10px] opacity-40 font-mono tracking-wider dark:text-white">
+        <p class="mb-4 sm:mb-0">
+          &copy; <span id="current-year">2026</span> POLIFORM STUDIO &amp; CONTRACTING CO. ARCHIVAL RECORD.
+        </p>
+        <div class="flex gap-6">
+          <a href="#" class="hover:underline">PRIVACY POLICY</a>
+          <a href="#" class="hover:underline">STUDIO REGISTERS</a>
+          <a href="#" class="hover:underline">MILAN MILIEU</a>
+        </div>
+      </footer>
+
+    </div>
+
+  </div>
+
+  <!-- VIDEO SHOWCASE LIGHTBOX MODAL -->
+  <div id="video-modal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="relative w-full max-w-4xl bg-[#141414] rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+      
+      <!-- Close button -->
+      <button 
+        onclick="closeVideoModal()"
+        class="absolute top-4 right-4 z-10 w-11 h-11 rounded-full bg-white/15 hover:bg-white/20 text-white flex items-center justify-center focus:outline-none transition-colors"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Aspect frame placeholder -->
+      <div class="aspect-video relative flex items-center justify-center">
+        <div class="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80" 
+            class="w-full h-full object-cover opacity-30"
+            alt="Architecture preview backdrop"
+          />
+        </div>
+
+        <div class="relative z-10 text-center text-white px-6">
+          <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-400 font-bold block mb-2">POLIFORM DOCUMENTARY DEBUT</span>
+          <h3 class="font-cinzel text-2xl sm:text-4xl font-normal mb-4">Sartorial Craft &amp; Space Balance</h3>
+          
+          <div class="max-w-xs mx-auto bg-white/20 h-0.5 rounded-full overflow-hidden mt-6">
+            <div class="bg-orange-500 h-full w-2/5 animate-pulse"></div>
+          </div>
+          <p class="text-[10px] text-neutral-500 mt-4 italic font-mono">
+            *Cinematic documentary video player demo is fully operational. Substitute with secure high-fidelity video stream.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- INTERACTIVE SYSTEM SCRIPT -->
+  <script>
+    // State values initialization
+    let isDarkMode = false;
+    let isGridActive = false;
+    let activePaletteKey = 'travertine';
+    let materialGrade = 'curated';
+    let isAudioActive = false;
+
+    // Web Audio Sound Synthesizers (State reference holders)
+    let audioCtx = null;
+    let soundNodes = [];
+
+    // Material boards specifications datasets
+    const MATERIAL_PALETTES = {
+      travertine: {
+        name: 'Travertine Classic',
+        concept: 'Warm, porous limestone textures combined with sand-drifted light oak and raw parchment accents.',
+        location: 'Tuscany Quarry, Italy',
+        hex: '#EFECE6',
+        image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+        finishes: ['Honed Silver Travertine', 'Unbrushed Wild Oak', 'Alabaster Plaster', 'Acid-Etched Brass']
+      },
+      eucalyptus: {
+        name: 'Smoked Eucalyptus',
+        concept: 'Deep, linear wood grains, darkened steel sash boundaries, and natural forest floor shadows.',
+        location: 'Kyoto Highlands, Japan',
+        hex: '#2D302E',
+        image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80',
+        finishes: ['Smoked Eucalyptus Veneer', 'Brushed Charcoal Steel', 'Raw Basalt Blocks', 'Fluted Cast Glass']
+      },
+      bronze: {
+        name: 'Patinated Bronze',
+        concept: 'An organic dialogue of hand-rubbed metals, rich tan cognac leathers, and velvet plaster walls.',
+        location: 'Marais Atelier, France',
+        hex: '#3E352F',
+        image: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1200&q=80',
+        finishes: ['Antiqued Bronze Alloy', 'Cognac Full-Aniline Leather', 'Ochre Clay Render', 'Pietra Grigia Marble']
+      }
+    };
+
+    // On Document Load initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('current-year').innerText = new Date().getFullYear();
+      
+      // Track coordinates for blueprint grid overlay
+      window.addEventListener('mousemove', (e) => {
+        const xPercent = ((e.clientX / window.innerWidth) * 100).toFixed(2);
+        const yPercent = ((e.clientY / window.innerHeight) * 100).toFixed(2);
+        document.getElementById('coord-x').innerText = xPercent;
+        document.getElementById('coord-y').innerText = yPercent;
+      });
+
+      // Render default travertine palette details
+      selectPalette('travertine');
+      
+      // Calculate initial estimate details
+      updateCalculation();
+    });
+
+    // Toggle Dark Mode
+    document.getElementById('btn-toggle-theme').addEventListener('click', () => {
+      isDarkMode = !isDarkMode;
+      const body = document.body;
+      const mainFrame = document.getElementById('main-frame');
+      const btnTheme = document.getElementById('btn-toggle-theme');
+
+      if (isDarkMode) {
+        document.documentElement.classList.add('dark');
+        body.classList.remove('bg-[#FAF8F5]', 'text-[#1c1b1a]');
+        body.classList.add('bg-[#121212]', 'text-[#EBE6E0]');
+        btnTheme.innerText = 'WARM BONE';
+      } else {
+        document.documentElement.classList.remove('dark');
+        body.classList.add('bg-[#FAF8F5]', 'text-[#1c1b1a]');
+        body.classList.remove('bg-[#121212]', 'text-[#EBE6E0]');
+        btnTheme.innerText = 'OBSIDIAN NOIR';
+      }
+    });
+
+    // Toggle Drafting Grid Blueprint overlays
+    document.getElementById('btn-toggle-grid').addEventListener('click', () => {
+      isGridActive = !isGridActive;
+      const grid = document.getElementById('drafting-grid');
+      const text = document.getElementById('grid-status-text');
+      const button = document.getElementById('btn-toggle-grid');
+
+      if (isGridActive) {
+        grid.classList.remove('hidden');
+        text.innerText = 'GRID ACTIVE';
+        button.classList.add('text-red-500', 'font-bold');
+      } else {
+        grid.classList.add('hidden');
+        text.innerText = 'SHOW GRID';
+        button.classList.remove('text-red-500', 'font-bold');
+      }
+    });
+
+    // Ambient spatial sound generation using Web Audio API nodes
+    document.getElementById('btn-toggle-sound').addEventListener('click', () => {
+      isAudioActive = !isAudioActive;
+      const iconMuted = document.getElementById('volume-icon-muted');
+      const iconPlaying = document.getElementById('volume-icon-playing');
+      const audioText = document.getElementById('audio-status-text');
+
+      if (!isAudioActive) {
+        if (audioCtx) {
+          audioCtx.close();
+          audioCtx = null;
+        }
+        iconMuted.classList.remove('hidden');
+        iconPlaying.classList.add('hidden');
+        audioText.innerText = 'PLAY CHORAL';
+      } else {
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          const ctx = new AudioContext();
+          audioCtx = ctx;
+
+          // Low wind warm acoustic background noise
+          const bufferSize = 2 * ctx.sampleRate;
+          const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const output = noiseBuffer.getChannelData(0);
+          let lastOut = 0.0;
+          for (let i = 0; i < bufferSize; i++) {
+            const white = Math.random() * 2 - 1;
+            // Native low-pass approximation
+            output[i] = (lastOut + (0.02 * white)) / 1.02;
+            lastOut = output[i];
+            output[i] *= 3.5; // Gain factor
+          }
+
+          const brownNoise = ctx.createBufferSource();
+          brownNoise.buffer = noiseBuffer;
+          brownNoise.loop = true;
+
+          const lowpassFilter = ctx.createBiquadFilter();
+          lowpassFilter.type = 'lowpass';
+          lowpassFilter.frequency.value = 160;
+
+          const gainNode = ctx.createGain();
+          gainNode.gain.value = 0.05;
+
+          brownNoise.connect(lowpassFilter);
+          lowpassFilter.connect(gainNode);
+          gainNode.connect(ctx.destination);
+          brownNoise.start();
+
+          // Low-volume high resonance clean metallic sine oscillation representing ambient harmony
+          const chime = ctx.createOscillator();
+          const chimeGain = ctx.createGain();
+          chime.type = 'sine';
+          chime.frequency.setValueAtTime(440, ctx.currentTime); 
+
+          const LFO = ctx.createOscillator();
+          const lfoGain = ctx.createGain();
+          LFO.frequency.value = 0.05;
+          lfoGain.gain.value = 0.005;
+
+          LFO.connect(lfoGain);
+          lfoGain.connect(chimeGain.gain);
+
+          chimeGain.gain.setValueAtTime(0.001, ctx.currentTime);
+          chime.connect(chimeGain);
+          chimeGain.connect(ctx.destination);
+
+          chime.start();
+          LFO.start();
+
+          soundNodes = [brownNoise, chime, LFO];
+          
+          iconMuted.classList.add('hidden');
+          iconPlaying.classList.remove('hidden');
+          audioText.innerText = 'AMBIENCE ON';
+        } catch (err) {
+          console.warn('Spatial Audio System blocked or unsupported in current viewport framework', err);
+        }
+      }
+    });
+
+    // Before/After Frame Split bar drag
+    function handleSliderChange(val) {
+      document.getElementById('after-image-wrapper').style.width = `${val}%`;
+      document.getElementById('split-indicator').style.left = `${val}%`;
+    }
+
+    // Material board interactive tab update
+    function selectPalette(key) {
+      activePaletteKey = key;
+      const palette = MATERIAL_PALETTES[key];
+      
+      // Update UI texts
+      document.getElementById('palette-title').innerText = palette.name;
+      document.getElementById('palette-location').innerText = `Extraction Zone: ${palette.location}`;
+      document.getElementById('palette-concept').innerText = `"${palette.concept}"`;
+      document.getElementById('palette-image').src = palette.image;
+      document.getElementById('palette-color-block').style.backgroundColor = palette.hex;
+      document.getElementById('palette-ref-tag').innerText = `REF_SAMPLE_ID // ${palette.name.toUpperCase().replace(' ', '_')}`;
+
+      // Update interactive finishes specification list
+      const listContainer = document.getElementById('palette-finishes');
+      listContainer.innerHTML = '';
+      palette.finishes.forEach((finish) => {
+        const li = document.createElement('li');
+        li.className = 'flex items-center gap-3 text-xs';
+        li.innerHTML = `
+          <span class="w-1.5 h-1.5 rounded-full" style="background-color: ${palette.hex};"></span>
+          <span class="opacity-85">${finish}</span>
+        `;
+        listContainer.appendChild(li);
+      });
+
+      // Refresh tab class states
+      ['travertine', 'eucalyptus', 'bronze'].forEach((k) => {
+        const tab = document.getElementById(`tab-${k}`);
+        if (k === key) {
+          tab.className = "px-4 py-2 text-[10px] uppercase tracking-wider font-semibold rounded transition-all bg-black text-white shadow-lg";
+        } else {
+          tab.className = "px-4 py-2 text-[10px] uppercase tracking-wider font-semibold rounded transition-all bg-white text-neutral-500 dark:bg-neutral-800 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100";
+        }
+      });
+    }
+
+    // Transfer Material palette properties down to form
+    function applyPaletteToBrief() {
+      const palette = MATERIAL_PALETTES[activePaletteKey];
+      document.getElementById('form-palette').value = palette.name;
+      document.getElementById('form-message').value = `I am interested in drafting a residence design concept utilizing the ${palette.name} finishes.`;
+      
+      // Auto-scroll down to form
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Interactive budget estimation updates
+    function setMaterialGrade(grade) {
+      materialGrade = grade;
+      ['basic', 'curated', 'museum'].forEach((g) => {
+        const btn = document.getElementById(`spec-${g}`);
+        if (g === grade) {
+          btn.className = "p-4 rounded-xl text-left border border-orange-500 bg-white dark:bg-black shadow-md ring-1 ring-orange-500 transition-all";
+        } else {
+          btn.className = "p-4 rounded-xl text-left border border-neutral-200 dark:border-neutral-700 bg-white/40 dark:bg-neutral-800/40 hover:bg-white dark:hover:bg-neutral-800 transition-all";
+        }
+      });
+      updateCalculation();
+    }
+
+    function updateCalculation() {
+      const area = Number(document.getElementById('calc-area-slider').value);
+      
+      // Display Slider Metrics
+      document.getElementById('display-area').innerText = area.toLocaleString();
+      document.getElementById('display-metric-area').innerText = Math.round(area * 0.0929);
+
+      // Determine building cost grade
+      let rate = 450;
+      if (materialGrade === 'basic') rate = 320;
+      if (materialGrade === 'museum') rate = 890;
+
+      const basicPrice = area * rate;
+      document.getElementById('breakdown-basic').innerText = `$${basicPrice.toLocaleString()}`;
+
+      // Calculate optional add-ons
+      const isSmartChecked = document.getElementById('addon-smart').checked;
+      const isGeothermalChecked = document.getElementById('addon-geothermal').checked;
+      const isArtistryChecked = document.getElementById('addon-artistry').checked;
+
+      let smartPrice = 0;
+      if (isSmartChecked) {
+        smartPrice = area * 45;
+        document.getElementById('breakdown-smart').innerText = `$${smartPrice.toLocaleString()}`;
+        document.getElementById('breakdown-smart-row').classList.remove('hidden');
+      } else {
+        document.getElementById('breakdown-smart-row').classList.add('hidden');
+      }
+
+      let geothermalPrice = 0;
+      if (isGeothermalChecked) {
+        geothermalPrice = 85000;
+        document.getElementById('breakdown-geothermal').innerText = `$${geothermalPrice.toLocaleString()}`;
+        document.getElementById('breakdown-geothermal-row').classList.remove('hidden');
+      } else {
+        document.getElementById('breakdown-geothermal-row').classList.add('hidden');
+      }
+
+      let artistryPrice = 0;
+      if (isArtistryChecked) {
+        artistryPrice = area * 75;
+        document.getElementById('breakdown-artistry').innerText = `$${artistryPrice.toLocaleString()}`;
+        document.getElementById('breakdown-artistry-row').classList.remove('hidden');
+      } else {
+        document.getElementById('breakdown-artistry-row').classList.add('hidden');
+      }
+
+      // Compute Total sum
+      const total = basicPrice + smartPrice + geothermalPrice + artistryPrice;
+      
+      const formattedEstimate = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0
+      }).format(total);
+
+      document.getElementById('display-total-estimate').innerText = formattedEstimate;
+    }
+
+    // Apply computed pricing properties down to form
+    function applyEstimateToBrief() {
+      const area = Number(document.getElementById('calc-area-slider').value);
+      const totalText = document.getElementById('display-total-estimate').innerText;
+      document.getElementById('form-message').value = `Calculated draft structural proposal of ${totalText} for my luxury custom estate planning of ${area.toLocaleString()} sq ft. Let's schedule an initial review.`;
+      
+      // Scroll smoothly down to the brief form container
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Video modal handlers
+    function openVideoModal() {
+      document.getElementById('video-modal').classList.remove('hidden');
+    }
+
+    function closeVideoModal() {
+      document.getElementById('video-modal').classList.add('hidden');
+    }
+
+    // Handle Form submission
+    function handleBriefSubmit(event) {
+      event.preventDefault();
+      document.getElementById('project-brief-form').classList.add('hidden');
+      document.getElementById('brief-success').classList.remove('hidden');
+    }
+
+    // Reset Brief input block state
+    function resetBriefForm() {
+      document.getElementById('project-brief-form').reset();
+      document.getElementById('project-brief-form').classList.remove('hidden');
+      document.getElementById('brief-success').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
