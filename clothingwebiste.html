@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AÉRE — Maison de Mode | Minimalist Editorial Fashion</title>
+    
+    <!-- Google Fonts: Editorial Serif and Minimal Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons for high-end minimalistic iconography -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration for Aesthetic Custom Colors & Fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        aesthetic: {
+                            ivory: '#FAF9F6',
+                            sand: '#F2ECE4',
+                            clay: '#D4C9BC',
+                            terracotta: '#B37D64',
+                            charcoal: '#1A1918',
+                            slate: '#5E5C58',
+                        }
+                    },
+                    letterSpacing: {
+                        widest: '.2em',
+                        mega: '.35em',
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'marquee': 'marquee 25s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom scrollbar matching aesthetic theme */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4C9BC;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1A1918;
+        }
+        
+        /* Blur background glassmorphism helper */
+        .glass-header {
+            background-color: rgba(250, 249, 246, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Hotspot pulsation */
+        .hotspot-pulse::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(26, 25, 24, 0.4);
+            animation: hotspotPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        @keyframes hotspotPing {
+            75%, 100% {
+                transform: scale(2.2);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-aesthetic-ivory text-aesthetic-charcoal font-sans overflow-x-hidden selection:bg-aesthetic-clay selection:text-aesthetic-charcoal">
+
+
+    <!-- Global Toast Container (Alert Alternative) -->
+    <div id="toast-container" class="fixed top-6 right-6 z-50 flex flex-col gap-3 pointer-events-none max-w-sm w-full px-4"></div>
+
+    <!-- Announcement Ticker -->
+    <div class="bg-aesthetic-charcoal text-aesthetic-ivory text-xs tracking-widest py-2.5 overflow-hidden relative z-40 border-b border-aesthetic-charcoal/10">
+        <div class="flex whitespace-nowrap animate-marquee">
+            <span class="mx-8">AÉRE ATELIER: COMPLIMENTARY EXPEDITED SHIPPING OVER $300</span>
+            <span class="mx-8">EXPLORE ARCHIVE CHAPTER III : UNCOMPROMISING TAILORING</span>
+            <span class="mx-8">AÉRE ATELIER: COMPLIMENTARY EXPEDITED SHIPPING OVER $300</span>
+            <span class="mx-8">EXPLORE ARCHIVE CHAPTER III : UNCOMPROMISING TAILORING</span>
+        </div>
+    </div>
+
+    <header class="glass-header sticky top-0 left-0 w-full z-40 border-b border-aesthetic-clay/30 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            
+            <!-- Mobile Menu Toggle -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden text-aesthetic-charcoal hover:opacity-70 transition-opacity focus:outline-none" aria-label="Toggle Navigation">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+
+            <!-- Desktop Nav Items Left -->
+            <nav class="hidden lg:flex items-center space-x-10 text-xs tracking-widest uppercase font-medium">
+                <a href="#collections" class="hover:text-aesthetic-terracotta transition-colors duration-300 relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[1px] after:bg-aesthetic-terracotta hover:after:w-full after:transition-all after:duration-300">Shop All</a>
+                <a href="#lookbook" class="hover:text-aesthetic-terracotta transition-colors duration-300 relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[1px] after:bg-aesthetic-terracotta hover:after:w-full after:transition-all after:duration-300">Lookbook</a>
+                <a href="#style-quiz" class="hover:text-aesthetic-terracotta transition-colors duration-300 relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[1px] after:bg-aesthetic-terracotta hover:after:w-full after:transition-all after:duration-300">Style Finder</a>
+            </nav>
+
+            <!-- Brand Logo centered perfectly -->
+            <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                <a href="#" class="inline-block">
+                    <h1 class="font-serif text-3xl md:text-4xl tracking-widest font-light select-none">A É R E</h1>
+                    <p class="text-[8px] uppercase tracking-mega text-aesthetic-slate">Maison de Mode</p>
+                </a>
+            </div>
+
+            <!-- Header Action Items -->
+            <div class="flex items-center space-x-6">
+                <!-- Search Button -->
+                <button onclick="toggleSearchOverlay()" class="text-aesthetic-charcoal hover:text-aesthetic-terracotta transition-colors focus:outline-none" aria-label="Search">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </button>
+                <!-- Wishlist (Aesthetic Mock) -->
+                <button onclick="showAestheticToast('Added to wishlist', 'Visual mood board updated.')" class="hidden sm:inline-block text-aesthetic-charcoal hover:text-aesthetic-terracotta transition-colors focus:outline-none" aria-label="Wishlist">
+                    <i data-lucide="heart" class="w-5 h-5"></i>
+                </button>
+                <!-- Cart Button -->
+                <button onclick="toggleCartDrawer()" class="relative text-aesthetic-charcoal hover:text-aesthetic-terracotta transition-colors focus:outline-none" aria-label="Open Shopping Bag">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span id="cart-count-badge" class="absolute -top-1.5 -right-1.5 bg-aesthetic-charcoal text-aesthetic-ivory text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center opacity-0 transition-opacity duration-300">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer Navigation Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-aesthetic-charcoal/40 z-50 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0">
+        <div class="w-4/5 max-w-sm bg-aesthetic-ivory h-full p-8 flex flex-col justify-between shadow-2xl transition-transform duration-300 -translate-x-full">
+            <div>
+                <div class="flex justify-between items-center mb-12">
+                    <h2 class="font-serif text-2xl tracking-widest">AÉRE</h2>
+                    <button onclick="toggleMobileMenu()" class="text-aesthetic-charcoal focus:outline-none">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <nav class="flex flex-col space-y-6 text-sm tracking-widest uppercase font-medium">
+                    <a href="#collections" onclick="toggleMobileMenu()" class="border-b border-aesthetic-clay/20 py-2">Shop All</a>
+                    <a href="#lookbook" onclick="toggleMobileMenu()" class="border-b border-aesthetic-clay/20 py-2">Interactive Lookbook</a>
+                    <a href="#style-quiz" onclick="toggleMobileMenu()" class="border-b border-aesthetic-clay/20 py-2">Style Finder Quiz</a>
+                    <a href="#story" onclick="toggleMobileMenu()" class="border-b border-aesthetic-clay/20 py-2">Our Manifesto</a>
+                </nav>
+            </div>
+            <div class="space-y-4">
+                <p class="text-xs text-aesthetic-slate tracking-widest uppercase">Support &amp; Contact</p>
+                <p class="text-xs">atelier@aeremaison.com</p>
+                <div class="flex space-x-4 pt-2">
+                    <a href="#" class="text-aesthetic-charcoal"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                    <a href="#" class="text-aesthetic-charcoal"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="relative min-h-[calc(100vh-120px)] flex items-center overflow-hidden bg-aesthetic-sand px-6 md:px-12 py-16">
+        <!-- Floating abstract background glow elements for premium mood -->
+        <div class="absolute top-20 right-10 w-[40rem] h-[40rem] rounded-full bg-gradient-to-tr from-[#E6DFD5]/40 to-[#ECDCC9]/50 filter blur-3xl opacity-75 pointer-events-none"></div>
+        <div class="absolute bottom-10 left-[-100px] w-96 h-96 rounded-full bg-[#EAE3D9]/60 filter blur-3xl opacity-50 pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+            <!-- Hero Left: Typography & Storytelling -->
+            <div class="lg:col-span-6 space-y-8 animate-fade-in-up">
+                <div class="space-y-2">
+                    <p class="text-xs md:text-sm tracking-mega uppercase text-aesthetic-terracotta font-semibold">PRE-COLLECTION ARCHIVE IV</p>
+                    <h2 class="font-serif text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[0.95] text-aesthetic-charcoal">
+                        Quiet Luxury, <br><span class="italic font-normal font-serif">Uncompromised</span>
+                    </h2>
+                </div>
+                
+                <p class="text-aesthetic-slate text-sm md:text-base max-w-lg font-light leading-relaxed">
+                    Designed for modern collectors of timeless forms. Our garments are curated silhouettes tailored meticulously from low-impact materials sourced only from generational Italian and Japanese weavers.
+                </p>
+
+                <!-- Premium Styled CTAs -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
+                    <a href="#collections" class="group relative px-8 py-4 bg-aesthetic-charcoal text-aesthetic-ivory text-xs tracking-widest uppercase font-medium rounded-sm overflow-hidden text-center transition-all hover:bg-opacity-95 shadow-lg">
+                        <span class="relative z-10">Explore Collection</span>
+                        <div class="absolute inset-0 bg-aesthetic-terracotta translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
+                    </a>
+                    <a href="#lookbook" class="group px-8 py-4 border border-aesthetic-charcoal/40 text-aesthetic-charcoal hover:border-aesthetic-charcoal hover:bg-aesthetic-charcoal/5 text-xs tracking-widest uppercase font-medium rounded-sm transition-all duration-300 text-center">
+                        Shop Lookbook <i data-lucide="arrow-right" class="inline-block w-3.5 h-3.5 ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Small Brand Perks list -->
+                <div class="grid grid-cols-3 gap-6 pt-10 border-t border-aesthetic-clay/30 max-w-lg">
+                    <div>
+                        <h4 class="text-xs uppercase tracking-wider font-semibold">Hand-cut</h4>
+                        <p class="text-[11px] text-aesthetic-slate">Every piece unique</p>
+                    </div>
+                    <div>
+                        <h4 class="text-xs uppercase tracking-wider font-semibold">100% Organic</h4>
+                        <p class="text-[11px] text-aesthetic-slate">Zero microplastics</p>
+                    </div>
+                    <div>
+                        <h4 class="text-xs uppercase tracking-wider font-semibold">Circular</h4>
+                        <p class="text-[11px] text-aesthetic-slate">Recycle scheme active</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Right: Dynamic Split-Screen Editorial Image & Floating Card -->
+            <div class="lg:col-span-6 relative flex justify-center items-center">
+                <!-- Outer decorative container -->
+                <div class="relative w-full max-w-md md:max-w-lg aspect-[3/4] rounded-lg overflow-hidden shadow-2xl group border-[12px] border-aesthetic-ivory">
+                    <!-- Elegant visual loader state / Unsplash Editorial Hero -->
+                    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800" 
+                         alt="Elegant minimal resort wear" 
+                         class="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out"
+                         onerror="this.src='https://placehold.co/800x1066/F2ECE4/1A1918?text=A%C3%89RE+EDITORIAL'">
+                    
+                    <!-- Bottom Gradient Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-aesthetic-charcoal/40 via-transparent to-transparent pointer-events-none"></div>
+
+                    <!-- Floating Item Mini Overlay (Interactive Showcase) -->
+                    <div class="absolute bottom-6 left-6 right-6 bg-aesthetic-ivory/95 backdrop-blur-md p-4 rounded shadow-lg flex items-center justify-between pointer-events-auto transform translate-y-2 group-hover:translate-y-0 transition-all duration-500">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-wider text-aesthetic-slate">Featured Outfit</p>
+                            <h4 class="font-serif text-sm font-semibold tracking-wide">The Linen Solstice Trench</h4>
+                        </div>
+                        <button onclick="openQuickView(1)" class="bg-aesthetic-charcoal text-aesthetic-ivory p-2.5 rounded-full hover:bg-aesthetic-terracotta transition-colors" aria-label="Quick View Outfit">
+                            <i data-lucide="eye" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Floating Editorial Brand Tag -->
+                <div class="absolute -top-6 -left-6 bg-aesthetic-terracotta text-aesthetic-ivory px-5 py-3 rounded-sm shadow-md rotate-[-3deg] hidden sm:block">
+                    <p class="text-[10px] tracking-widest uppercase">LATEST DROP — AUTUMN ARCHIVE</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="collections" class="py-24 max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+                <span class="text-xs uppercase tracking-mega text-aesthetic-terracotta font-semibold">SHOP NEW RELEASES</span>
+                <h2 class="font-serif text-3xl md:text-5xl tracking-tight mt-1">Sartorial Essentials</h2>
+            </div>
+            
+            <!-- Dynamic Filters -->
+            <div id="filter-buttons" class="flex flex-wrap gap-2 text-xs uppercase tracking-wider font-semibold border-b border-aesthetic-clay/20 pb-2 md:pb-0">
+                <button onclick="filterProducts('all')" class="px-4 py-2 text-aesthetic-charcoal border-b-2 border-aesthetic-charcoal transition-all">All Objects</button>
+                <button onclick="filterProducts('apparel')" class="px-4 py-2 text-aesthetic-slate hover:text-aesthetic-charcoal border-b-2 border-transparent transition-all">Apparel</button>
+                <button onclick="filterProducts('outerwear')" class="px-4 py-2 text-aesthetic-slate hover:text-aesthetic-charcoal border-b-2 border-transparent transition-all">Outerwear</button>
+                <button onclick="filterProducts('accessories')" class="px-4 py-2 text-aesthetic-slate hover:text-aesthetic-charcoal border-b-2 border-transparent transition-all">Accessories</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Product Catalog Grid -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+            <!-- Product Cards injected dynamically via JS below -->
+        </div>
+    </section>
+
+    <section id="lookbook" class="bg-aesthetic-sand py-24 border-y border-aesthetic-clay/30 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-xs uppercase tracking-mega text-aesthetic-terracotta font-semibold">EDITORIAL VISUAL LAB</span>
+                <h2 class="font-serif text-3xl md:text-5xl mt-2 tracking-tight">Interactive Lookbook</h2>
+                <p class="text-aesthetic-slate text-sm font-light mt-4">
+                    Hover or tap on the pulsing elements of our Fall Atelier campaign photo to instantly unveil styling combinations and explore individual tailoring specifications.
+                </p>
+            </div>
+
+            <!-- The Interactive Hotspot Platform -->
+            <div class="relative max-w-4xl mx-auto rounded-xl overflow-hidden shadow-2xl bg-aesthetic-ivory">
+                <div class="aspect-[16/10] md:aspect-[16/9] w-full relative">
+                    <!-- Model Shot (Scenic background, detailed outfit visible) -->
+                    <img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?q=80&w=1400" 
+                         alt="Autumn Lookbook Portrait" 
+                         class="w-full h-full object-cover">
+
+                    <!-- Atmospheric dark overlay to emphasize hotspots -->
+                    <div class="absolute inset-0 bg-aesthetic-charcoal/10 hover:bg-aesthetic-charcoal/5 transition-colors duration-500"></div>
+
+                    <!-- Hotspot 1: Silk Vest Top (Torso area) -->
+                    <div class="absolute top-[32%] left-[48%] group/hotspot">
+                        <button onclick="toggleHotspotPopover(event, 'hotspot-vest-popover')" 
+                                class="hotspot-pulse relative w-8 h-8 rounded-full bg-aesthetic-charcoal text-aesthetic-ivory border-2 border-aesthetic-ivory flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-aesthetic-terracotta"
+                                aria-label="View knitwear detailed information">
+                            <i data-lucide="plus" class="w-4 h-4 transition-transform group-hover/hotspot:rotate-45"></i>
+                        </button>
+                        
+                        <!-- Rich Popover Details -->
+                        <div id="hotspot-vest-popover" class="absolute bottom-10 left-1/2 -translate-x-1/2 w-64 bg-aesthetic-ivory/95 backdrop-blur-md p-4 rounded-lg shadow-xl border border-aesthetic-clay/30 z-20 hidden">
+                            <div class="flex flex-col gap-1 text-center items-center">
+                                <span class="text-[9px] uppercase tracking-widest text-aesthetic-terracotta">Fine Knit</span>
+                                <h4 class="font-serif text-sm font-semibold text-aesthetic-charcoal">The Raw-Silk Knit Vest</h4>
+                                <p class="text-xs font-serif mt-1">$220 USD</p>
+                                <button onclick="quickAddByProductId(4)" class="mt-3 w-full bg-aesthetic-charcoal hover:bg-aesthetic-terracotta text-aesthetic-ivory py-2 text-[10px] uppercase tracking-widest rounded transition-all">
+                                    Quick Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hotspot 2: Cream Linen Trench Coat (Shoulder/Sleeve area) -->
+                    <div class="absolute top-[22%] left-[32%] group/hotspot">
+                        <button onclick="toggleHotspotPopover(event, 'hotspot-trench-popover')" 
+                                class="hotspot-pulse relative w-8 h-8 rounded-full bg-aesthetic-charcoal text-aesthetic-ivory border-2 border-aesthetic-ivory flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-aesthetic-terracotta"
+                                aria-label="View outerwear detailed information">
+                            <i data-lucide="plus" class="w-4 h-4 transition-transform group-hover/hotspot:rotate-45"></i>
+                        </button>
+                        
+                        <!-- Rich Popover Details -->
+                        <div id="hotspot-trench-popover" class="absolute bottom-10 left-1/2 -translate-x-1/2 w-64 bg-aesthetic-ivory/95 backdrop-blur-md p-4 rounded-lg shadow-xl border border-aesthetic-clay/30 z-20 hidden">
+                            <div class="flex flex-col gap-1 text-center items-center">
+                                <span class="text-[9px] uppercase tracking-widest text-aesthetic-terracotta">Generational Tailoring</span>
+                                <h4 class="font-serif text-sm font-semibold text-aesthetic-charcoal">Linen Solstice Trench</h4>
+                                <p class="text-xs font-serif mt-1">$580 USD</p>
+                                <button onclick="quickAddByProductId(1)" class="mt-3 w-full bg-aesthetic-charcoal hover:bg-aesthetic-terracotta text-aesthetic-ivory py-2 text-[10px] uppercase tracking-widest rounded transition-all">
+                                    Quick Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hotspot 3: Leather Saddle Bag (Hip area) -->
+                    <div class="absolute top-[58%] left-[62%] group/hotspot">
+                        <button onclick="toggleHotspotPopover(event, 'hotspot-bag-popover')" 
+                                class="hotspot-pulse relative w-8 h-8 rounded-full bg-aesthetic-charcoal text-aesthetic-ivory border-2 border-aesthetic-ivory flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-aesthetic-terracotta"
+                                aria-label="View accessory details">
+                            <i data-lucide="plus" class="w-4 h-4 transition-transform group-hover/hotspot:rotate-45"></i>
+                        </button>
+                        
+                        <!-- Rich Popover Details -->
+                        <div id="hotspot-bag-popover" class="absolute bottom-10 left-1/2 -translate-x-1/2 w-64 bg-aesthetic-ivory/95 backdrop-blur-md p-4 rounded-lg shadow-xl border border-aesthetic-clay/30 z-20 hidden">
+                            <div class="flex flex-col gap-1 text-center items-center">
+                                <span class="text-[9px] uppercase tracking-widest text-aesthetic-terracotta">Vegetable Tanned Leather</span>
+                                <h4 class="font-serif text-sm font-semibold text-aesthetic-charcoal">Saddle Messenger Bag</h4>
+                                <p class="text-xs font-serif mt-1">$450 USD</p>
+                                <button onclick="quickAddByProductId(5)" class="mt-3 w-full bg-aesthetic-charcoal hover:bg-aesthetic-terracotta text-aesthetic-ivory py-2 text-[10px] uppercase tracking-widest rounded transition-all">
+                                    Quick Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="style-quiz" class="py-24 max-w-7xl mx-auto px-6 border-b border-aesthetic-clay/30">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <!-- Left Side: Conceptual Branding Copy -->
+            <div class="lg:col-span-4 space-y-6">
+                <span class="text-xs uppercase tracking-mega text-aesthetic-terracotta font-semibold">ARTIFICIAL ATELIER ASSISTANT</span>
+                <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-tight">Find Your Aesthetic</h2>
+                <p class="text-aesthetic-slate text-sm leading-relaxed font-light">
+                    Selecting standard garments limits personal narrative. Walk through our bespoke style engine designed by our directors, instantly outputting custom mood boards and sizing recommendations suited just for you.
+                </p>
+                <div class="p-4 bg-aesthetic-sand rounded-sm border-l-4 border-aesthetic-terracotta">
+                    <p class="text-xs text-aesthetic-charcoal italic">
+                        "Elegance is not about being noticed, it's about being remembered." — AÉRE Manifesto
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right Side: The Interactive Multi-step Engine -->
+            <div class="lg:col-span-8 bg-white p-8 md:p-12 rounded-2xl shadow-xl border border-aesthetic-clay/20 relative min-h-[420px] flex flex-col justify-between">
+                <!-- Progress Line -->
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-aesthetic-sand rounded-t-2xl overflow-hidden">
+                    <div id="quiz-progress-bar" class="h-full bg-aesthetic-terracotta transition-all duration-500" style="width: 33.33%"></div>
+                </div>
+
+                <!-- Step 1: Mood Profile -->
+                <div id="quiz-step-1" class="space-y-6">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-widest text-aesthetic-terracotta font-bold">STAGE 01 — THE EMOTIONAL MATRICES</span>
+                        <h3 class="font-serif text-xl md:text-2xl mt-1">Select your primary spatial preference:</h3>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="selectQuizOption(1, 'Warm Sand and brutalist structures')" class="group p-5 border border-aesthetic-clay/40 rounded-lg text-left hover:border-aesthetic-charcoal transition-all bg-aesthetic-ivory">
+                            <h4 class="font-serif text-sm font-semibold group-hover:text-aesthetic-terracotta">Warm Sand &amp; Brutalism</h4>
+                            <p class="text-xs text-aesthetic-slate mt-1">Minimal design, organic textures, earth tones</p>
+                        </button>
+                        <button onclick="selectQuizOption(1, 'Industrial concrete and night neon')" class="group p-5 border border-aesthetic-clay/40 rounded-lg text-left hover:border-aesthetic-charcoal transition-all bg-aesthetic-ivory">
+                            <h4 class="font-serif text-sm font-semibold group-hover:text-aesthetic-terracotta">Monochrome Minimal</h4>
+                            <p class="text-xs text-aesthetic-slate mt-1">Sleek tailoring, structured sharp geometry, deep blacks</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Fit Profile -->
+                <div id="quiz-step-2" class="space-y-6 hidden">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-widest text-aesthetic-terracotta font-bold">STAGE 02 — PHYSICAL SILHOUETTE</span>
+                        <h3 class="font-serif text-xl md:text-2xl mt-1">How do you prefer fabrics to hang?</h3>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="selectQuizOption(2, 'Oversized and unstructured flow')" class="group p-5 border border-aesthetic-clay/40 rounded-lg text-left hover:border-aesthetic-charcoal transition-all bg-aesthetic-ivory">
+                            <h4 class="font-serif text-sm font-semibold group-hover:text-aesthetic-terracotta">Architectural Drape</h4>
+                            <p class="text-xs text-aesthetic-slate mt-1">Flowing profiles, comfort-focused unstructured fits</p>
+                        </button>
+                        <button onclick="selectQuizOption(2, 'Perfectly measured and slim bespoke contours')" class="group p-5 border border-aesthetic-clay/40 rounded-lg text-left hover:border-aesthetic-charcoal transition-all bg-aesthetic-ivory">
+                            <h4 class="font-serif text-sm font-semibold group-hover:text-aesthetic-terracotta">Tailored Bespoke</h4>
+                            <p class="text-xs text-aesthetic-slate mt-1">Sharp shoulders, precise seam lines, contoured elegance</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Output Curation Card -->
+                <div id="quiz-step-3" class="space-y-6 hidden">
+                    <div class="text-center py-6">
+                        <div class="inline-flex items-center justify-center p-3 bg-green-50 text-green-700 rounded-full mb-4">
+                            <i data-lucide="check-circle-2" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl">Atelier Curation Generated</h3>
+                        <p class="text-xs text-aesthetic-slate uppercase tracking-wider mt-1">YOUR STYLE IDENTITY: ARCHITECTURAL SOJOURNER</p>
+                        
+                        <!-- Curated Suggested Product Dynamic Container -->
+                        <div class="mt-8 p-4 bg-aesthetic-sand rounded-xl max-w-md mx-auto flex items-center gap-4 text-left border border-aesthetic-clay/30">
+                            <img id="curated-prod-img" src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=300" 
+                                 alt="Curated Choice" class="w-20 h-24 object-cover rounded shadow-md">
+                            <div>
+                                <span class="text-[9px] uppercase tracking-widest text-aesthetic-terracotta font-bold">Curated For You</span>
+                                <h4 id="curated-prod-title" class="font-serif text-base font-semibold">Linen Solstice Trench</h4>
+                                <p id="curated-prod-price" class="text-xs text-aesthetic-slate font-serif mt-0.5">$580 USD</p>
+                                <button onclick="quickAddCuratedQuizProduct()" class="mt-2 inline-flex items-center gap-2 bg-aesthetic-charcoal text-aesthetic-ivory px-4 py-1.5 rounded text-[10px] uppercase tracking-wider hover:bg-aesthetic-terracotta transition-colors">
+                                    <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i> Add Curation
+                                </button>
+                            </div>
+                        </div>
+
+                        <button onclick="resetQuiz()" class="mt-6 text-[10px] tracking-widest uppercase font-semibold text-aesthetic-slate hover:text-aesthetic-charcoal transition-colors underline underline-offset-4">
+                            Recalibrate Preferences
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Back / Reset Actions Footer -->
+                <div id="quiz-footer" class="flex items-center justify-between pt-6 border-t border-aesthetic-clay/20 mt-6">
+                    <button id="quiz-prev-btn" onclick="quizPrevStep()" class="text-xs uppercase tracking-wider text-aesthetic-slate hover:text-aesthetic-charcoal disabled:opacity-30 focus:outline-none" disabled>
+                        Previous
+                    </button>
+                    <span id="quiz-step-indicator" class="text-xs uppercase tracking-widest text-aesthetic-slate">Step 1 of 3</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="story" class="py-24 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="relative group">
+            <div class="absolute -inset-2 bg-gradient-to-tr from-[#E6DFD5] to-[#B37D64]/10 rounded-lg blur-xl opacity-40 group-hover:opacity-60 transition duration-1000"></div>
+            <div class="relative overflow-hidden rounded-xl shadow-2xl aspect-[4/5] bg-aesthetic-sand">
+                <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=800" 
+                     alt="Craftsman styling jacket" 
+                     class="w-full h-full object-cover filter brightness-95 transform scale-100 group-hover:scale-105 transition duration-700">
+                <div class="absolute bottom-8 left-8 text-aesthetic-ivory">
+                    <p class="text-[10px] uppercase tracking-mega">MADE IN MILAN ATELIER</p>
+                    <h3 class="font-serif text-2xl mt-1 font-light">The Pure Silk Crafting</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-8">
+            <span class="text-xs uppercase tracking-mega text-aesthetic-terracotta font-semibold">OUR SARTORIAL PHILOSOPHY</span>
+            <h2 class="font-serif text-3xl md:text-5xl tracking-tight leading-tight">
+                Designed to drift slowly, crafted to outlast generations
+            </h2>
+            <div class="space-y-6 text-aesthetic-slate text-sm md:text-base leading-relaxed font-light">
+                <p>
+                    AÉRE was conceived as a response to the chaotic acceleration of standard consumerism. We make clothing that embodies breathing room—intentional, spacious patterns and generous premium cuts created from organic, bio-degradable components.
+                </p>
+                <p>
+                    We maintain deep relationships with zero-waste textile micro-mills in Tokyo, Biella, and Lyon, relying on local hands who hold decades of heritage knowledge over mechanized factory lines.
+                </p>
+            </div>
+            
+            <div class="flex items-center gap-6 pt-6 border-t border-aesthetic-clay/30">
+                <div>
+                    <h5 class="font-serif text-xl">100%</h5>
+                    <p class="text-[11px] uppercase tracking-wider text-aesthetic-slate">Traceable Supply Chains</p>
+                </div>
+                <div class="h-8 w-[1px] bg-aesthetic-clay"></div>
+                <div>
+                    <h5 class="font-serif text-xl">Zero</h5>
+                    <p class="text-[11px] uppercase tracking-wider text-aesthetic-slate">Plastic-Derived Fibers</p>
+                </div>
+                <div class="h-8 w-[1px] bg-aesthetic-clay"></div>
+                <div>
+                    <h5 class="font-serif text-xl">10+ Years</h5>
+                    <p class="text-[11px] uppercase tracking-wider text-aesthetic-slate">Life cycle minimum standard</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-aesthetic-charcoal text-aesthetic-ivory pt-20 pb-12 border-t border-aesthetic-charcoal">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 mb-16">
+            
+            <!-- Logo Column & Newsletter -->
+            <div class="lg:col-span-5 space-y-8">
+                <div>
+                    <h2 class="font-serif text-3xl tracking-widest font-light">A É R E</h2>
+                    <p class="text-[8px] uppercase tracking-mega text-aesthetic-clay mt-1">Maison de Mode</p>
+                </div>
+                <div class="space-y-4">
+                    <p class="text-xs uppercase tracking-widest text-aesthetic-clay">Join our Private Circle</p>
+                    <p class="text-xs text-aesthetic-clay/70 font-light leading-relaxed max-w-md">
+                        Receive exclusive access to seasonal drops, intimate gallery popups, and personal capsule design appointments.
+                    </p>
+                    <!-- Newsletter Form (With Custom Toast alerts instead of window alert) -->
+                    <form onsubmit="handleNewsletterSubmit(event)" class="flex gap-2 max-w-md">
+                        <input type="email" placeholder="YOUR EMAIL ADDRESS" required
+                               class="bg-aesthetic-charcoal border border-aesthetic-clay/30 rounded-sm px-4 py-3 text-xs tracking-wider text-aesthetic-ivory placeholder-aesthetic-clay/40 focus:outline-none focus:border-aesthetic-terracotta flex-1 transition-all">
+                        <button type="submit" class="bg-aesthetic-ivory text-aesthetic-charcoal hover:bg-aesthetic-terracotta hover:text-aesthetic-ivory transition-colors text-xs uppercase tracking-widest px-6 rounded-sm font-semibold">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Links: Shop -->
+            <div class="lg:col-span-2 space-y-4">
+                <h4 class="text-xs uppercase tracking-widest text-aesthetic-clay font-bold">Collections</h4>
+                <ul class="space-y-2.5 text-xs text-aesthetic-clay/70 font-light">
+                    <li><a href="#collections" class="hover:text-aesthetic-ivory transition-colors">The Solstice Capsule</a></li>
+                    <li><a href="#collections" class="hover:text-aesthetic-ivory transition-colors">Fine Italian Tailoring</a></li>
+                    <li><a href="#collections" class="hover:text-aesthetic-ivory transition-colors">Minimal Leisure Linen</a></li>
+                    <li><a href="#collections" class="hover:text-aesthetic-ivory transition-colors">Essential Accents</a></li>
+                </ul>
+            </div>
+
+            <!-- Links: Brand Services -->
+            <div class="lg:col-span-2 space-y-4">
+                <h4 class="text-xs uppercase tracking-widest text-aesthetic-clay font-bold">Services</h4>
+                <ul class="space-y-2.5 text-xs text-aesthetic-clay/70 font-light">
+                    <li><a href="#" class="hover:text-aesthetic-ivory transition-colors">Custom Tailoring Consults</a></li>
+                    <li><a href="#" class="hover:text-aesthetic-ivory transition-colors">Sartorial Lifetime Repair</a></li>
+                    <li><a href="#" class="hover:text-aesthetic-ivory transition-colors">The Recirculate Program</a></li>
+                    <li><a href="#" class="hover:text-aesthetic-ivory transition-colors">Virtual Sizing Consult</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact / Address Details -->
+            <div class="lg:col-span-3 space-y-4">
+                <h4 class="text-xs uppercase tracking-widest text-aesthetic-clay font-bold">Atelier Houses</h4>
+                <p class="text-xs text-aesthetic-clay/70 font-light leading-relaxed">
+                    AÉRE MILANO<br>Via Montenapoleone, 14<br>20121 Milano, MI, Italy
+                </p>
+                <p class="text-xs text-aesthetic-clay/70 font-light leading-relaxed">
+                    AÉRE TOKYO<br>3 Chome-10-2 Minamiaoyama<br>Minato City, Tokyo 107-0062, Japan
+                </p>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-aesthetic-clay/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-aesthetic-clay/50 font-light">
+            <p>&copy; 2026 AÉRE Maison de Mode. All concepts reserved. Made for visual aesthetic showcase.</p>
+            <div class="flex space-x-6">
+                <a href="#" class="hover:text-aesthetic-ivory transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-aesthetic-ivory transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-aesthetic-ivory transition-colors">Accessibility</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Global Cart Drawer Overlay -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 bg-aesthetic-charcoal/40 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0">
+        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-aesthetic-ivory p-8 flex flex-col justify-between shadow-2xl transition-transform duration-300 translate-x-full">
+            <div>
+                <!-- Drawer Header -->
+                <div class="flex items-center justify-between border-b border-aesthetic-clay/20 pb-4 mb-6">
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-serif text-xl">Your Atelier Order</h3>
+                        <span id="cart-badge-large" class="text-[10px] bg-aesthetic-charcoal text-aesthetic-ivory font-bold px-2 py-0.5 rounded-full">0</span>
+                    </div>
+                    <button onclick="toggleCartDrawer()" class="text-aesthetic-charcoal hover:opacity-75 focus:outline-none">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+                <!-- Shopping Cart Product List -->
+                <div id="cart-items" class="space-y-6 max-h-[calc(100vh-280px)] overflow-y-auto pr-2">
+                    <!-- Dynamic Cart Items Rendered via JS -->
+                    <div id="empty-cart-message" class="text-center py-16 text-aesthetic-slate space-y-4">
+                        <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto stroke-1"></i>
+                        <p class="text-xs uppercase tracking-widest">No garments in your atelier collection yet.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Footer Area -->
+            <div id="cart-footer" class="border-t border-aesthetic-clay/30 pt-6 space-y-4 hidden">
+                <div class="flex items-center justify-between text-sm uppercase tracking-wider">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal" class="font-serif font-bold text-base">$0.00 USD</span>
+                </div>
+                <div class="bg-aesthetic-sand p-3 rounded text-[11px] text-aesthetic-slate flex items-center gap-2">
+                    <i data-lucide="truck" class="w-4 h-4 flex-shrink-0"></i>
+                    <span>Your order qualifies for complimentary carbon-neutral shipping.</span>
+                </div>
+                <button onclick="simulateCheckout()" class="w-full bg-aesthetic-charcoal hover:bg-aesthetic-terracotta text-aesthetic-ivory py-4 text-xs tracking-widest uppercase font-semibold rounded-sm transition-colors shadow-lg">
+                    Finalize Order &amp; Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Quick View & Customization Modal -->
+    <div id="quick-view-modal" class="fixed inset-0 z-50 bg-aesthetic-charcoal/50 backdrop-blur-sm hidden items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+        <div class="bg-aesthetic-ivory w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl relative transition-transform duration-300 scale-95 flex flex-col md:flex-row">
+            
+            <!-- Quick View Close Button -->
+            <button onclick="closeQuickView()" class="absolute top-4 right-4 text-aesthetic-charcoal z-10 bg-aesthetic-ivory/80 hover:bg-aesthetic-charcoal hover:text-aesthetic-ivory p-2 rounded-full shadow-md focus:outline-none transition-all">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+
+            <!-- Left: Zoomed High-Resolution Visual Showcase -->
+            <div class="w-full md:w-1/2 aspect-square md:aspect-auto md:h-full min-h-[300px] relative bg-aesthetic-sand">
+                <img id="qv-img" src="" alt="Zoomed view" class="w-full h-full object-cover">
+                <span class="absolute top-4 left-4 bg-aesthetic-charcoal text-aesthetic-ivory text-[9px] uppercase tracking-widest px-3 py-1 rounded-sm">
+                    Atelier Standard
+                </span>
+            </div>
+
+            <!-- Right: Detailed Specifications and Selections -->
+            <div class="w-full md:w-1/2 p-8 md:p-10 flex flex-col justify-between space-y-6">
+                <div class="space-y-4">
+                    <div>
+                        <span id="qv-category" class="text-[10px] uppercase tracking-widest text-aesthetic-terracotta font-semibold">Trench Coat</span>
+                        <h3 id="qv-title" class="font-serif text-2xl md:text-3xl text-aesthetic-charcoal tracking-wide mt-1">Linen Solstice Trench</h3>
+                        <p id="qv-price" class="text-base font-serif mt-1">$580 USD</p>
+                    </div>
+                    
+                    <p id="qv-desc" class="text-xs md:text-sm text-aesthetic-slate leading-relaxed font-light">
+                        Individually cut, styled to trace contours fluidly. Fabricated from sustainably cultivated Belgian flax linen woven on heritage shuttle looms.
+                    </p>
+
+                    <!-- Select Color Chips -->
+                    <div class="space-y-2">
+                        <label class="text-[10px] uppercase tracking-widest text-aesthetic-slate">Material Color</label>
+                        <div class="flex space-x-3 items-center">
+                            <button class="w-6 h-6 rounded-full bg-aesthetic-sand ring-2 ring-aesthetic-charcoal focus:outline-none" aria-label="Sand color"></button>
+                            <button class="w-6 h-6 rounded-full bg-aesthetic-slate hover:scale-110 transition-transform focus:outline-none" aria-label="Charcoal grey color"></button>
+                            <button class="w-6 h-6 rounded-full bg-[#1C1B1A] hover:scale-110 transition-transform focus:outline-none" aria-label="Midnight black color"></button>
+                        </div>
+                    </div>
+
+                    <!-- Size Select -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-[10px] uppercase tracking-widest text-aesthetic-slate">
+                            <label>Sizing Model</label>
+                            <button onclick="showAestheticToast('Sizing Blueprint', 'Loose drape style recommended for accurate aesthetic fit.')" class="underline hover:text-aesthetic-charcoal transition-colors">Sizing Chart</button>
+                        </div>
+                        <div class="grid grid-cols-4 gap-2 text-xs">
+                            <button class="py-2.5 border border-aesthetic-clay/50 hover:border-aesthetic-charcoal hover:bg-aesthetic-charcoal hover:text-aesthetic-ivory transition-all rounded text-center">XS</button>
+                            <button class="py-2.5 border border-aesthetic-charcoal bg-aesthetic-charcoal text-aesthetic-ivory rounded text-center">S</button>
+                            <button class="py-2.5 border border-aesthetic-clay/50 hover:border-aesthetic-charcoal hover:bg-aesthetic-charcoal hover:text-aesthetic-ivory transition-all rounded text-center">M</button>
+                            <button class="py-2.5 border border-aesthetic-clay/50 hover:border-aesthetic-charcoal hover:bg-aesthetic-charcoal hover:text-aesthetic-ivory transition-all rounded text-center">L</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add to Bag Action Button -->
+                <button id="qv-add-btn" onclick="" class="w-full bg-aesthetic-charcoal hover:bg-aesthetic-terracotta text-aesthetic-ivory py-4 text-xs tracking-widest uppercase font-semibold rounded-sm transition-all shadow-md">
+                    Add Tailoring to Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Full-screen Search Overlay -->
+    <div id="search-overlay" class="fixed inset-0 z-50 bg-aesthetic-charcoal/95 backdrop-blur-md flex items-center justify-center p-6 hidden transition-opacity duration-300 opacity-0">
+        <button onclick="toggleSearchOverlay()" class="absolute top-8 right-8 text-aesthetic-ivory hover:text-aesthetic-terracotta focus:outline-none">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+        <div class="w-full max-w-2xl space-y-8">
+            <div class="text-center space-y-2">
+                <span class="text-xs uppercase tracking-mega text-aesthetic-terracotta">ATELIER DIRECT ARCHIVE</span>
+                <h3 class="font-serif text-3xl text-aesthetic-ivory">Search Collection</h3>
+            </div>
+            <div class="relative">
+                <input type="text" placeholder="Type to search (e.g. Linen, Trench, Knit, Vest)" oninput="handleSearchType(this)"
+                       class="w-full bg-transparent border-b-2 border-aesthetic-clay/30 py-4 text-xl tracking-wider text-aesthetic-ivory placeholder-aesthetic-clay/30 focus:outline-none focus:border-aesthetic-terracotta transition-colors text-center">
+            </div>
+            <!-- Search Quick Tags -->
+            <div class="flex flex-wrap items-center justify-center gap-4 text-xs tracking-widest uppercase text-aesthetic-clay/70">
+                <span>Suggested:</span>
+                <button onclick="runSuggestedSearch('Linen')" class="underline hover:text-aesthetic-ivory">Linen</button>
+                <button onclick="runSuggestedSearch('Vest')" class="underline hover:text-aesthetic-ivory">Vest</button>
+                <button onclick="runSuggestedSearch('Trench')" class="underline hover:text-aesthetic-ivory">Trench</button>
+            </div>
+            <div id="search-results-mini" class="space-y-3 max-h-[160px] overflow-y-auto">
+                <!-- Search feedback dynamically shown here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Core Product Databases
+        const PRODUCTS = [
+            {
+                id: 1,
+                title: "Linen Solstice Trench",
+                category: "outerwear",
+                price: 580,
+                desc: "An exceptional longline, soft drape coat produced from 100% fine Belgian organic linen woven to ensure ventilation and effortless motion.",
+                img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=500"
+            },
+            {
+                id: 2,
+                title: "Silk Crepe Slip Dress",
+                category: "apparel",
+                price: 340,
+                desc: "Fluid silhouette detailing featuring ultra-fine hand-rolled bias cut hemlines and low-profile adjustable shoulder cords.",
+                img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=500"
+            },
+            {
+                id: 3,
+                title: "Structured Suede Slide",
+                category: "accessories",
+                price: 290,
+                desc: "Ergonomically carved cork beds covered with premium vegetable-tanned Italian calf suede to conform beautifully to foot patterns over time.",
+                img: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=500"
+            },
+            {
+                id: 4,
+                title: "Raw-Silk Knit Vest",
+                category: "apparel",
+                price: 220,
+                desc: "Textured, heavy-knit vest made with raw-spinned recycled silk providing exceptional breathability for summer styling layering.",
+                img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=500"
+            },
+            {
+                id: 5,
+                title: "Saddle Messenger Bag",
+                category: "accessories",
+                price: 450,
+                desc: "An artisanal double-stitch messenger bag crafted with vegetable-tanned full-grain leather, featuring brass custom cast hardware.",
+                img: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=500"
+            },
+            {
+                id: 6,
+                title: "Tailored Linen Trouser",
+                category: "apparel",
+                price: 260,
+                desc: "Wide-leg aesthetic tailored trousers fitted with high rise pleats and double pockets, designed for everyday ease.",
+                img: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=500"
+            }
+        ];
+
+        // State Store
+        let cart = [];
+        let currentFilter = 'all';
+        let currentQuizStep = 1;
+        let quizAnswers = {};
+
+        // On document load setup
+        window.addEventListener('DOMContentLoaded', () => {
+            // Initiate lucide icons
+            lucide.createIcons();
+            
+            // Build the catalog
+            renderProductCatalog();
+        });
+
+        // Toast alert system
+        function showAestheticToast(title, description) {
+            const container = document.getElementById('toast-container');
+            const toastId = 'toast-' + Date.now();
+            
+            const toastHtml = `
+                <div id="${toastId}" class="bg-aesthetic-charcoal text-aesthetic-ivory p-4 rounded-lg shadow-2xl border border-aesthetic-clay/30 flex flex-col gap-1 transform translate-y-3 opacity-0 transition-all duration-300 pointer-events-auto">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] uppercase tracking-widest text-aesthetic-terracotta font-bold">AÉRE ATELIER</span>
+                        <button onclick="dismissToast('${toastId}')" class="text-aesthetic-clay hover:text-white"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+                    </div>
+                    <h5 class="font-serif text-sm font-semibold">${title}</h5>
+                    <p class="text-[11px] text-aesthetic-clay/80 font-light">${description}</p>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', toastHtml);
+            lucide.createIcons();
+
+            // Animate transition
+            setTimeout(() => {
+                const toastEl = document.getElementById(toastId);
+                if (toastEl) {
+                    toastEl.classList.remove('translate-y-3', 'opacity-0');
+                }
+            }, 50);
+
+            // Auto dismiss after 4.5s
+            setTimeout(() => {
+                dismissToast(toastId);
+            }, 4500);
+        }
+
+        function dismissToast(id) {
+            const toastEl = document.getElementById(id);
+            if (toastEl) {
+                toastEl.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => {
+                    toastEl.remove();
+                }, 300);
+            }
+        }
+
+        // Render products list based on filtering rules
+        function renderProductCatalog() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+
+            const filtered = currentFilter === 'all' 
+                ? PRODUCTS 
+                : PRODUCTS.filter(p => p.category === currentFilter);
+
+            filtered.forEach(p => {
+                const card = `
+                    <div class="group relative flex flex-col justify-between">
+                        <!-- Product Visual Container -->
+                        <div class="relative aspect-[3/4] w-full bg-aesthetic-sand rounded-lg overflow-hidden mb-4">
+                            <!-- Background Subtle Hover Gradient -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-aesthetic-charcoal/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"></div>
+                            
+                            <img src="${p.img}" alt="${p.title}" 
+                                 class="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-700 ease-out"
+                                 onerror="this.src='https://placehold.co/400x533/F2ECE4/1A1918?text=${encodeURIComponent(p.title)}'">
+                            
+                            <!-- Action Overlays -->
+                            <div class="absolute bottom-4 left-4 right-4 flex gap-2 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-20">
+                                <button onclick="openQuickView(${p.id})" class="flex-1 bg-aesthetic-ivory hover:bg-aesthetic-charcoal hover:text-aesthetic-ivory text-aesthetic-charcoal py-2.5 text-[10px] uppercase tracking-widest font-semibold rounded-sm transition-all flex items-center justify-center gap-1.5 shadow-md">
+                                    <i data-lucide="eye" class="w-3.5 h-3.5"></i> Customise Fit
+                                </button>
+                                <button onclick="quickAddByProductId(${p.id})" class="bg-aesthetic-charcoal text-aesthetic-ivory hover:bg-aesthetic-terracotta p-2.5 rounded-sm transition-colors shadow-md" aria-label="Quick Add to Bag">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Information Section -->
+                        <div class="flex justify-between items-start gap-2">
+                            <div>
+                                <h3 class="font-serif text-sm font-semibold text-aesthetic-charcoal tracking-wide">
+                                    <button onclick="openQuickView(${p.id})" class="hover:underline text-left">${p.title}</button>
+                                </h3>
+                                <p class="text-[10px] text-aesthetic-slate uppercase tracking-wider mt-1">${p.category}</p>
+                            </div>
+                            <p class="font-serif text-sm font-bold text-aesthetic-charcoal">$${p.price} USD</p>
+                        </div>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', card);
+            });
+
+            // Re-bind Lucide Icons newly injected
+            lucide.createIcons();
+        }
+
+        // Handle collection filtering buttons
+        function filterProducts(category) {
+            currentFilter = category;
+            
+            // Render active button states
+            const buttons = document.querySelectorAll('#filter-buttons button');
+            buttons.forEach(btn => {
+                btn.className = "px-4 py-2 text-aesthetic-slate hover:text-aesthetic-charcoal border-b-2 border-transparent transition-all";
+            });
+
+            const event = window.event;
+            if (event && event.target) {
+                event.target.className = "px-4 py-2 text-aesthetic-charcoal border-b-2 border-aesthetic-charcoal transition-all";
+            }
+
+            renderProductCatalog();
+        }
+
+        function toggleHotspotPopover(event, popoverId) {
+            event.stopPropagation();
+            
+            // Hide any other visible popovers
+            const allPopovers = document.querySelectorAll('[id^="hotspot-"]');
+            allPopovers.forEach(p => {
+                if(p.id !== popoverId) p.classList.add('hidden');
+            });
+
+            const popover = document.getElementById(popoverId);
+            if (popover) {
+                popover.classList.toggle('hidden');
+            }
+        }
+
+        // Close popovers if user clicks away
+        window.addEventListener('click', () => {
+            const allPopovers = document.querySelectorAll('[id^="hotspot-"]');
+            allPopovers.forEach(p => p.classList.add('hidden'));
+        });
+
+        function selectQuizOption(step, answer) {
+            quizAnswers[step] = answer;
+            
+            if (step === 1) {
+                // Move step 1 to step 2
+                document.getElementById('quiz-step-1').classList.add('hidden');
+                document.getElementById('quiz-step-2').classList.remove('hidden');
+                document.getElementById('quiz-progress-bar').style.width = '66.66%';
+                document.getElementById('quiz-step-indicator').innerText = 'Step 2 of 3';
+                document.getElementById('quiz-prev-btn').disabled = false;
+                currentQuizStep = 2;
+            } else if (step === 2) {
+                // Compile and go to step 3 (Output recommended visual)
+                document.getElementById('quiz-step-2').classList.add('hidden');
+                document.getElementById('quiz-step-3').classList.remove('hidden');
+                document.getElementById('quiz-progress-bar').style.width = '100%';
+                document.getElementById('quiz-step-indicator').innerText = 'Curation Ready';
+                document.getElementById('quiz-prev-btn').disabled = true;
+                currentQuizStep = 3;
+
+                // Dynamically update product curation based on choice
+                if (answer.includes('Oversized')) {
+                    // Curation matches Trench
+                    document.getElementById('curated-prod-img').src = "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=300";
+                    document.getElementById('curated-prod-title').innerText = "Linen Solstice Trench";
+                    document.getElementById('curated-prod-price').innerText = "$580 USD";
+                    // Customise quiz action
+                    window._quizCuratedId = 1; 
+                } else {
+                    // Curation matches Knit Vest
+                    document.getElementById('curated-prod-img').src = "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=300";
+                    document.getElementById('curated-prod-title').innerText = "Raw-Silk Knit Vest";
+                    document.getElementById('curated-prod-price').innerText = "$220 USD";
+                    // Customise quiz action
+                    window._quizCuratedId = 4;
+                }
+            }
+        }
+
+        function quizPrevStep() {
+            if (currentQuizStep === 2) {
+                document.getElementById('quiz-step-2').classList.add('hidden');
+                document.getElementById('quiz-step-1').classList.remove('hidden');
+                document.getElementById('quiz-progress-bar').style.width = '33.33%';
+                document.getElementById('quiz-step-indicator').innerText = 'Step 1 of 3';
+                document.getElementById('quiz-prev-btn').disabled = true;
+                currentQuizStep = 1;
+            }
+        }
+
+        function resetQuiz() {
+            document.getElementById('quiz-step-3').classList.add('hidden');
+            document.getElementById('quiz-step-1').classList.remove('hidden');
+            document.getElementById('quiz-progress-bar').style.width = '33.33%';
+            document.getElementById('quiz-step-indicator').innerText = 'Step 1 of 3';
+            document.getElementById('quiz-prev-btn').disabled = true;
+            currentQuizStep = 1;
+            quizAnswers = {};
+        }
+
+        function quickAddCuratedQuizProduct() {
+            const prodId = window._quizCuratedId || 1;
+            quickAddByProductId(prodId);
+            showAestheticToast("Curation Added", "Your custom fitted recommendation was added to the order.");
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cart-drawer');
+            const drawerContent = drawer.querySelector('.shadow-2xl');
+
+            if (drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                setTimeout(() => {
+                    drawer.classList.remove('opacity-0');
+                    drawerContent.classList.remove('translate-x-full');
+                }, 50);
+            } else {
+                drawer.classList.add('opacity-0');
+                drawerContent.classList.add('translate-x-full');
+                setTimeout(() => {
+                    drawer.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const menuContent = menu.querySelector('.shadow-2xl');
+
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                setTimeout(() => {
+                    menu.classList.remove('opacity-0');
+                    menuContent.classList.remove('-translate-x-full');
+                }, 50);
+            } else {
+                menu.classList.add('opacity-0');
+                menuContent.classList.add('-translate-x-full');
+                setTimeout(() => {
+                    menu.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function quickAddByProductId(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            // Check if product is already in the cart
+            const existingItem = cart.find(item => item.product.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ product, quantity: 1 });
+            }
+
+            updateCartUI();
+            showAestheticToast("Added to Cart", `${product.title} has been prepared for checkout.`);
+        }
+
+        function updateCartUI() {
+            const cartContainer = document.getElementById('cart-items');
+            const emptyMessage = document.getElementById('empty-cart-message');
+            const cartFooter = document.getElementById('cart-footer');
+            const totalItemsBadge = document.getElementById('cart-count-badge');
+            const totalItemsBadgeLarge = document.getElementById('cart-badge-large');
+            const subtotalText = document.getElementById('cart-subtotal');
+
+            // Clear dynamic elements
+            const existingItems = cartContainer.querySelectorAll('.cart-item-row');
+            existingItems.forEach(item => item.remove());
+
+            if (cart.length === 0) {
+                emptyMessage.classList.remove('hidden');
+                cartFooter.classList.add('hidden');
+                totalItemsBadge.classList.add('opacity-0');
+                totalItemsBadgeLarge.innerText = '0';
+                return;
+            }
+
+            emptyMessage.classList.add('hidden');
+            cartFooter.classList.remove('hidden');
+
+            let totalItems = 0;
+            let subtotal = 0;
+
+            cart.forEach(item => {
+                totalItems += item.quantity;
+                subtotal += item.product.price * item.quantity;
+
+                const rowHtml = `
+                    <div class="cart-item-row flex gap-4 items-center border-b border-aesthetic-clay/20 pb-4">
+                        <img src="${item.product.img}" alt="${item.product.title}" class="w-16 h-20 object-cover rounded shadow">
+                        <div class="flex-1 space-y-1">
+                            <h4 class="font-serif text-sm font-semibold">${item.product.title}</h4>
+                            <p class="text-[10px] text-aesthetic-slate uppercase tracking-wider">${item.product.category}</p>
+                            <div class="flex items-center gap-2">
+                                <button onclick="changeCartQty(${item.product.id}, -1)" class="w-6 h-6 border border-aesthetic-clay/40 flex items-center justify-center text-xs hover:bg-aesthetic-sand rounded">-</button>
+                                <span class="text-xs font-semibold px-1">${item.quantity}</span>
+                                <button onclick="changeCartQty(${item.product.id}, 1)" class="w-6 h-6 border border-aesthetic-clay/40 flex items-center justify-center text-xs hover:bg-aesthetic-sand rounded">+</button>
+                            </div>
+                        </div>
+                        <div class="text-right flex flex-col justify-between h-20">
+                            <button onclick="removeCartItem(${item.product.id})" class="text-aesthetic-slate hover:text-red-600 transition-colors self-end" aria-label="Remove item">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                            <p class="font-serif text-sm font-bold">$${(item.product.price * item.quantity)}</p>
+                        </div>
+                    </div>
+                `;
+                cartContainer.insertAdjacentHTML('beforeend', rowHtml);
+            });
+
+            // Update badge totals
+            totalItemsBadge.innerText = totalItems;
+            totalItemsBadge.classList.remove('opacity-0');
+            totalItemsBadgeLarge.innerText = totalItems;
+            subtotalText.innerText = `$${subtotal.toFixed(2)} USD`;
+
+            lucide.createIcons();
+        }
+
+        function changeCartQty(id, delta) {
+            const item = cart.find(i => i.product.id === id);
+            if (!item) return;
+
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.product.id !== id);
+            }
+            updateCartUI();
+        }
+
+        function removeCartItem(id) {
+            cart = cart.filter(i => i.product.id !== id);
+            updateCartUI();
+            showAestheticToast("Garment Removed", "Your collection configuration has been updated.");
+        }
+
+        function simulateCheckout() {
+            toggleCartDrawer();
+            showAestheticToast(
+                "Order Created Seamlessly", 
+                "Proceeding to secure atelier vault billing gateway. Thank you for collecting AÉRE."
+            );
+            // Clear checkout simulated
+            cart = [];
+            updateCartUI();
+        }
+
+        function openQuickView(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            document.getElementById('qv-title').innerText = product.title;
+            document.getElementById('qv-category').innerText = product.category;
+            document.getElementById('qv-price').innerText = `$${product.price} USD`;
+            document.getElementById('qv-desc').innerText = product.desc;
+            document.getElementById('qv-img').src = product.img;
+
+            // Update the CTA callback dynamically
+            const addBtn = document.getElementById('qv-add-btn');
+            addBtn.setAttribute('onclick', `quickAddByProductId(${product.id}); closeQuickView()`);
+
+            // Show Modal and transition in
+            const modal = document.getElementById('quick-view-modal');
+            const modalContent = modal.querySelector('.scale-95');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 50);
+        }
+
+        function closeQuickView() {
+            const modal = document.getElementById('quick-view-modal');
+            const modalContent = modal.querySelector('.scale-100');
+
+            modal.classList.add('opacity-0');
+            if(modalContent) {
+                modalContent.classList.remove('scale-100');
+                modalContent.classList.add('scale-95');
+            }
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function toggleSearchOverlay() {
+            const overlay = document.getElementById('search-overlay');
+            if (overlay.classList.contains('hidden')) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => {
+                    overlay.classList.remove('opacity-0');
+                }, 50);
+            } else {
+                overlay.classList.add('opacity-0');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function handleSearchType(inputElement) {
+            const query = inputElement.value.toLowerCase().trim();
+            const resultsBox = document.getElementById('search-results-mini');
+            resultsBox.innerHTML = '';
+
+            if (query.length < 2) return;
+
+            const matches = PRODUCTS.filter(p => p.title.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query));
+            if (matches.length === 0) {
+                resultsBox.innerHTML = '<p class="text-xs text-aesthetic-clay/50 text-center">No archival garments matches this aesthetic query.</p>';
+                return;
+            }
+
+            matches.forEach(p => {
+                const itemHtml = `
+                    <button onclick="openQuickView(${p.id}); toggleSearchOverlay()" class="w-full flex items-center gap-4 p-2 rounded hover:bg-white/10 text-left transition-colors">
+                        <img src="${p.img}" alt="${p.title}" class="w-10 h-12 object-cover rounded">
+                        <div>
+                            <h4 class="text-xs font-semibold text-aesthetic-ivory font-serif">${p.title}</h4>
+                            <p class="text-[9px] text-aesthetic-clay/70 uppercase tracking-widest">${p.category} — $${p.price}</p>
+                        </div>
+                    </button>
+                `;
+                resultsBox.insertAdjacentHTML('beforeend', itemHtml);
+            });
+        }
+
+        function runSuggestedSearch(term) {
+            const input = document.querySelector('#search-overlay input');
+            if (input) {
+                input.value = term;
+                handleSearchType(input);
+            }
+        }
+
+        function handleNewsletterSubmit(e) {
+            e.preventDefault();
+            const emailInput = e.target.querySelector('input');
+            const userEmail = emailInput.value;
+            showAestheticToast("Membership Confirmed", `Welcome to our inner circle. Archival updates will be targeted to ${userEmail}.`);
+            emailInput.value = '';
+        }
+    </script>
+</body>
+</html>
