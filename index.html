@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="A collection of creative web development projects by Azhar Ali."
+    >
+
+    <title>Azhar Ali | Web Projects</title>
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background: #07090d;
+            color: #ffffff;
+
+            min-height: 100vh;
+
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+
+        /* =====================================================
+           BACKGROUND
+        ===================================================== */
+
+        body::before {
+            content: "";
+
+            position: fixed;
+
+            width: 600px;
+            height: 600px;
+
+            top: -250px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(113, 91, 255, 0.18),
+                    transparent 70%
+                );
+
+            pointer-events: none;
+
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,0.018) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.018) 1px,
+                    transparent 1px
+                );
+
+            background-size: 50px 50px;
+
+            pointer-events: none;
+
+            z-index: -3;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent 80%
+                );
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            height: 76px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 7%;
+
+            background:
+                rgba(7, 9, 13, 0.78);
+
+            backdrop-filter: blur(20px);
+
+            border-bottom:
+                1px solid rgba(255,255,255,0.07);
+        }
+
+
+        .logo {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 20px;
+
+            font-weight: 800;
+
+            letter-spacing: -0.5px;
+        }
+
+
+        .logo-box {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8b7cff,
+                    #5144ff
+                );
+
+            box-shadow:
+                0 8px 25px
+                rgba(95, 78, 255, 0.3);
+
+            font-size: 14px;
+        }
+
+
+        .logo span {
+            color: #8c82ff;
+        }
+
+
+        .nav-links {
+            display: flex;
+
+            align-items: center;
+
+            gap: 30px;
+
+            list-style: none;
+        }
+
+
+        .nav-links a {
+            color: #8f96a5;
+
+            font-size: 14px;
+
+            transition: 0.25s;
+        }
+
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+
+        .github-button {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 10px 17px;
+
+            border-radius: 9px;
+
+            background: #ffffff;
+
+            color: #08090c;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            transition: 0.25s;
+        }
+
+
+        .github-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 25px
+                rgba(255,255,255,0.12);
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+            position: relative;
+
+            min-height: 590px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+
+            padding: 90px 20px 80px;
+
+            overflow: hidden;
+        }
+
+
+        .hero-glow {
+            position: absolute;
+
+            width: 450px;
+            height: 450px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(104, 87, 255, 0.15);
+
+            filter: blur(110px);
+
+            top: 50px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            pointer-events: none;
+        }
+
+
+        .hero-content {
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 900px;
+        }
+
+
+        .eyebrow {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            padding: 8px 14px;
+
+            border:
+                1px solid
+                rgba(137, 124, 255, 0.25);
+
+            background:
+                rgba(106, 90, 255, 0.08);
+
+            border-radius: 100px;
+
+            color: #aaa2ff;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            letter-spacing: 0.3px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+
+            background: #7c6cff;
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 0 12px
+                rgba(124,108,255,0.9);
+        }
+
+
+        .hero h1 {
+            font-size:
+                clamp(48px, 7vw, 82px);
+
+            line-height: 0.98;
+
+            letter-spacing: -5px;
+
+            margin-bottom: 27px;
+
+            font-weight: 850;
+        }
+
+
+        .gradient {
+            background:
+                linear-gradient(
+                    100deg,
+                    #ffffff 10%,
+                    #aaa1ff 55%,
+                    #6658ff
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        .hero-description {
+            max-width: 650px;
+
+            margin: auto;
+
+            color: #858d9c;
+
+            font-size: 17px;
+
+            line-height: 1.8;
+        }
+
+
+        .hero-actions {
+            margin-top: 35px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .primary-button {
+            padding: 14px 23px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8176ff,
+                    #5c4eff
+                );
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            box-shadow:
+                0 12px 35px
+                rgba(92,78,255,0.22);
+
+            transition: 0.3s;
+        }
+
+
+        .primary-button:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 18px 40px
+                rgba(92,78,255,0.35);
+        }
+
+
+        .secondary-button {
+            padding: 13px 22px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.09);
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            color: #c5cad3;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition: 0.3s;
+        }
+
+
+        .secondary-button:hover {
+            background:
+                rgba(255,255,255,0.07);
+
+            color: white;
+
+            transform: translateY(-3px);
+        }
+
+
+        /* =====================================================
+           STATS
+        ===================================================== */
+
+        .stats {
+            max-width: 850px;
+
+            margin: -10px auto 0;
+
+            padding: 0 20px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+        }
+
+
+        .stat {
+            padding: 22px;
+
+            text-align: center;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.07);
+
+            background:
+                rgba(255,255,255,0.025);
+
+            border-radius: 14px;
+
+            backdrop-filter: blur(10px);
+        }
+
+
+        .stat-number {
+            display: block;
+
+            font-size: 25px;
+
+            font-weight: 800;
+
+            color: white;
+
+            margin-bottom: 3px;
+        }
+
+
+        .stat-label {
+            color: #6f7785;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =====================================================
+           PROJECT SECTION
+        ===================================================== */
+
+        .projects {
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding:
+                110px 30px
+                100px;
+        }
+
+
+        .section-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: end;
+
+            gap: 30px;
+
+            margin-bottom: 35px;
+        }
+
+
+        .section-label {
+            color: #7569ff;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 2px;
+
+            font-weight: 800;
+
+            margin-bottom: 10px;
+        }
+
+
+        .section-title {
+            font-size: 42px;
+
+            letter-spacing: -2px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .section-description {
+            color: #747c8b;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           SEARCH
+        ===================================================== */
+
+        .search-box {
+            position: relative;
+
+            width: 250px;
+        }
+
+
+        .search-box input {
+            width: 100%;
+
+            padding:
+                12px
+                15px
+                12px
+                40px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            background:
+                rgba(255,255,255,0.035);
+
+            color: white;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            font-size: 13px;
+
+            transition: 0.25s;
+        }
+
+
+        .search-box input:focus {
+            border-color:
+                rgba(117,105,255,0.5);
+
+            background:
+                rgba(255,255,255,0.05);
+        }
+
+
+        .search-icon {
+            position: absolute;
+
+            left: 14px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #666f7e;
+
+            font-size: 15px;
+        }
+
+
+        /* =====================================================
+           PROJECT GRID
+        ===================================================== */
+
+        .project-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .project-card {
+            position: relative;
+
+            overflow: hidden;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.07);
+
+            background:
+                rgba(15,18,25,0.88);
+
+            border-radius: 17px;
+
+            transition:
+                transform 0.35s,
+                border-color 0.35s,
+                box-shadow 0.35s;
+
+            animation: fadeUp 0.7s ease both;
+        }
+
+
+        .project-card:hover {
+            transform: translateY(-8px);
+
+            border-color:
+                rgba(117,105,255,0.45);
+
+            box-shadow:
+                0 25px 60px
+                rgba(0,0,0,0.35);
+        }
+
+
+        /* =====================================================
+           PROJECT VISUAL
+        ===================================================== */
+
+        .project-visual {
+            height: 205px;
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+
+        .project-visual::after {
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            filter: blur(45px);
+        }
+
+
+        .visual-jewelry {
+            background:
+                linear-gradient(
+                    135deg,
+                    #251c18,
+                    #614331
+                );
+        }
+
+
+        .visual-doctor {
+            background:
+                linear-gradient(
+                    135deg,
+                    #112c35,
+                    #17475b
+                );
+        }
+
+
+        .visual-architecture {
+            background:
+                linear-gradient(
+                    135deg,
+                    #202020,
+                    #403c38
+                );
+        }
+
+
+        .visual-liquid {
+            background:
+                linear-gradient(
+                    135deg,
+                    #141a38,
+                    #263e83
+                );
+        }
+
+
+        .visual-clothing {
+            background:
+                linear-gradient(
+                    135deg,
+                    #291b32,
+                    #642d5b
+                );
+        }
+
+
+        .visual-restaurant {
+            background:
+                linear-gradient(
+                    135deg,
+                    #301b15,
+                    #733b25
+                );
+        }
+
+
+        .visual-icon {
+            position: relative;
+
+            z-index: 2;
+
+            width: 78px;
+            height: 78px;
+
+            border-radius: 22px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 31px;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.15);
+
+            backdrop-filter: blur(15px);
+
+            box-shadow:
+                0 20px 40px
+                rgba(0,0,0,0.25);
+        }
+
+
+        .project-number {
+            position: absolute;
+
+            top: 16px;
+            left: 17px;
+
+            z-index: 3;
+
+            font-size: 10px;
+
+            letter-spacing: 1.5px;
+
+            color:
+                rgba(255,255,255,0.55);
+        }
+
+
+        .open-icon {
+            position: absolute;
+
+            right: 15px;
+            top: 15px;
+
+            z-index: 3;
+
+            width: 32px;
+            height: 32px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            border-radius: 9px;
+
+            background:
+                rgba(0,0,0,0.22);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.1);
+
+            font-size: 13px;
+
+            transition: 0.3s;
+        }
+
+
+        .project-card:hover .open-icon {
+            background: #7569ff;
+
+            transform: rotate(5deg);
+        }
+
+
+        /* =====================================================
+           PROJECT INFO
+        ===================================================== */
+
+        .project-info {
+            padding: 22px;
+        }
+
+
+        .project-category {
+            color: #8278ff;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.5px;
+
+            font-weight: 800;
+
+            margin-bottom: 8px;
+        }
+
+
+        .project-title {
+            font-size: 20px;
+
+            letter-spacing: -0.5px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .project-description {
+            color: #737b89;
+
+            font-size: 13px;
+
+            line-height: 1.7;
+
+            min-height: 66px;
+        }
+
+
+        .tags {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 6px;
+
+            margin:
+                17px 0
+                19px;
+        }
+
+
+        .tag {
+            padding:
+                5px
+                8px;
+
+            background:
+                rgba(255,255,255,0.04);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.05);
+
+            color: #858d9b;
+
+            border-radius: 6px;
+
+            font-size: 10px;
+        }
+
+
+        .project-link {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding-top: 15px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.06);
+
+            color: #a7a0ff;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        .arrow {
+            transition: 0.3s;
+
+            font-size: 17px;
+        }
+
+
+        .project-card:hover .arrow {
+            transform: translateX(5px);
+        }
+
+
+        /* =====================================================
+           EMPTY SEARCH
+        ===================================================== */
+
+        .no-results {
+            display: none;
+
+            grid-column: 1 / -1;
+
+            text-align: center;
+
+            padding: 60px 20px;
+
+            color: #777f8e;
+        }
+
+
+        /* =====================================================
+           ABOUT
+        ===================================================== */
+
+        .about-section {
+            padding:
+                100px 30px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.05);
+
+            background:
+                rgba(255,255,255,0.012);
+        }
+
+
+        .about-box {
+            max-width: 850px;
+
+            margin: auto;
+
+            text-align: center;
+        }
+
+
+        .about-box h2 {
+            font-size: 35px;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .about-box p {
+            color: #747c8b;
+
+            font-size: 14px;
+
+            line-height: 1.9;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+            padding:
+                30px 7%;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.06);
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            color: #5f6774;
+
+            font-size: 12px;
+        }
+
+
+        footer strong {
+            color: #aeb4bf;
+        }
+
+
+        .footer-links {
+            display: flex;
+
+            gap: 20px;
+        }
+
+
+        .footer-links a {
+            transition: 0.2s;
+        }
+
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+
+        /* =====================================================
+           ANIMATION
+        ===================================================== */
+
+        @keyframes fadeUp {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 950px) {
+
+            .project-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+
+            .nav-links {
+                display: none;
+            }
+
+
+            .hero {
+                min-height: 550px;
+
+                padding:
+                    70px 20px;
+            }
+
+
+            .hero h1 {
+                font-size: 48px;
+
+                letter-spacing: -3px;
+            }
+
+
+            .hero-description {
+                font-size: 15px;
+            }
+
+
+            .stats {
+                grid-template-columns:
+                    1fr;
+
+                max-width: 300px;
+            }
+
+
+            .projects {
+                padding:
+                    80px 20px;
+            }
+
+
+            .section-top {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+
+            .section-title {
+                font-size: 34px;
+            }
+
+
+            .search-box {
+                width: 100%;
+            }
+
+
+            .project-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .about-section {
+                padding:
+                    70px 20px;
+            }
+
+
+            footer {
+                flex-direction: column;
+
+                gap: 15px;
+
+                text-align: center;
+            }
+
+        }
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <header class="navbar">
+
+        <a
+            href="#"
+            class="logo"
+        >
+
+            <div class="logo-box">
+                AA
+            </div>
+
+            Azhar<span>.</span>
+
+        </a>
+
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="#projects">
+                    Projects
+                </a>
+            </li>
+
+            <li>
+                <a href="#about">
+                    About
+                </a>
+            </li>
+
+        </ul>
+
+
+        <!-- CHANGE THIS TO YOUR GITHUB PROFILE -->
+
+        <a
+            href="https://github.com/"
+            target="_blank"
+            class="github-button"
+        >
+
+            <span>GitHub</span>
+
+            <span>↗</span>
+
+        </a>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="hero">
+
+        <div class="hero-glow"></div>
+
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+
+                <span class="status-dot"></span>
+
+                Web Development Portfolio
+
+            </div>
+
+
+            <h1>
+
+                A collection of
+                <br>
+
+                <span class="gradient">
+                    things I've built.
+                </span>
+
+            </h1>
+
+
+            <p class="hero-description">
+
+                Explore a collection of creative websites,
+                landing pages and interactive web experiences.
+                Each project represents an experiment in design,
+                frontend development and user experience.
+
+            </p>
+
+
+            <div class="hero-actions">
+
+                <a
+                    href="#projects"
+                    class="primary-button"
+                >
+                    Explore Projects →
+                </a>
+
+
+                <a
+                    href="https://github.com/"
+                    target="_blank"
+                    class="secondary-button"
+                >
+                    View GitHub
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         STATS
+    ====================================================== -->
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <span
+                class="stat-number"
+                id="projectCount"
+            >
+                06
+            </span>
+
+            <span class="stat-label">
+                Projects
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <span class="stat-number">
+                100%
+            </span>
+
+            <span class="stat-label">
+                Responsive
+            </span>
+
+        </div>
+
+
+        <div class="stat">
+
+            <span class="stat-number">
+                HTML
+            </span>
+
+            <span class="stat-label">
+                Frontend
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PROJECTS
+    ====================================================== -->
+
+    <main
+        class="projects"
+        id="projects"
+    >
+
+
+        <div class="section-top">
+
+            <div>
+
+                <div class="section-label">
+                    Selected Work
+                </div>
+
+                <h2 class="section-title">
+                    My Projects
+                </h2>
+
+                <p class="section-description">
+                    Browse through my latest web experiments
+                    and frontend projects.
+                </p>
+
+            </div>
+
+
+            <!-- SEARCH -->
+
+            <div class="search-box">
+
+                <span class="search-icon">
+                    🔍
+                </span>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search projects..."
+                >
+
+            </div>
+
+        </div>
+
+
+
+        <div
+            class="project-grid"
+            id="projectGrid"
+        >
+
+
+            <!-- =================================================
+                 PROJECT 01
+            ================================================== -->
+
+            <a
+                href="./AURALuxuryJewelry.html"
+                class="project-card"
+                data-name="Aura Luxury Jewelry jewelry luxury"
+            >
+
+                <div
+                    class="project-visual visual-jewelry"
+                >
+
+                    <span class="project-number">
+                        01 / 06
+                    </span>
+
+
+                    <span class="open-icon">
+                        ↗
+                    </span>
+
+
+                    <div class="visual-icon">
+                        💎
+                    </div>
+
+                </div>
+
+
+                <div class="project-info">
+
+                    <div class="project-category">
+                        Luxury / E-Commerce
+                    </div>
+
+
+                    <h3 class="project-title">
+                        AURA Luxury Jewelry
+                    </h3>
+
+
+                    <p class="project-description">
+
+                        An elegant luxury jewelry website
+                        focused on premium visual design,
+                        products and sophisticated branding.
+
+                    </p>
+
+
+                    <div class="tags">
+
+                        <span class="tag">
+                            HTML
+                        </span>
+
+                        <span class="tag">
+                            CSS
+                        </span>
+
+                        <span class="tag">
+                            JavaScript
+                        </span>
+
+                        <span class="tag">
+                            UI Design
+                        </span>
+
+                    </div>
+
+
+                    <div class="project-link">
+
+                        <span>
+                            View Project
+                        </span>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 PROJECT 02
+            ================================================== -->
+
+            <a
+                href="./DoctorAppointment.html"
+                class="project-card"
+                data-name="doctor appointment healthcare medical"
+            >
+
+                <div
+                    class="project-visual visual-doctor"
+                >
+
+                    <span class="project-number">
+                        02 / 06
+                    </span>
+
+
+                    <span class="open-icon">
+                        ↗
+                    </span>
+
+
+                    <div class="visual-icon">
+                        🩺
+                    </div>
+
+                </div>
+
+
+                <div class="project-info">
+
+                    <div class="project-category">
+                        Healthcare
+                    </div>
+
+
+                    <h3 class="project-title">
+                        Doctor Appointment
+                    </h3>
+
+
+                    <p class="project-description">
+
+                        A clean healthcare interface designed
+                        for finding doctors and booking
+                        medical appointments.
+
+                    </p>
+
+
+                    <div class="tags">
+
+                        <span class="tag">
+                            HTML
+                        </span>
+
+                        <span class="tag">
+                            CSS
+                        </span>
+
+                        <span class="tag">
+                            JavaScript
+                        </span>
+
+                        <span class="tag">
+                            Responsive
+                        </span>
+
+                    </div>
+
+
+                    <div class="project-link">
+
+                        <span>
+                            View Project
+                        </span>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 PROJECT 03
+            ================================================== -->
+
+            <a
+                href="./EditorialArchitecture.html"
+                class="project-card"
+                data-name="editorial architecture architecture design"
+            >
+
+                <div
+                    class="project-visual visual-architecture"
+                >
+
+                    <span class="project-number">
+                        03 / 06
+                    </span>
+
+
+                    <span class="open-icon">
+                        ↗
+                    </span>
+
+
+                    <div class="visual-icon">
+                        🏛️
+                    </div>
+
+                </div>
+
+
+                <div class="project-info">
+
+                    <div class="project-category">
+                        Architecture / Editorial
+                    </div>
+
+
+                    <h3 class="project-title">
+                        Editorial Architecture
+                    </h3>
+
+
+                    <p class="project-description">
+
+                        A sophisticated editorial-style
+                        architecture website focused on
+                        typography and visual storytelling.
+
+                    </p>
+
+
+                    <div class="tags">
+
+                        <span class="tag">
+                            HTML
+                        </span>
+
+                        <span class="tag">
+                            CSS
+                        </span>
+
+                        <span class="tag">
+                            Editorial
+                        </span>
+
+                        <span class="tag">
+                            Design
+                        </span>
+
+                    </div>
+
+
+                    <div class="project-link">
+
+                        <span>
+                            View Project
+                        </span>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 PROJECT 04
+            ================================================== -->
+
+            <a
+                href="./LiquidEffect.html"
+                class="project-card"
+                data-name="liquid effect animation creative"
+            >
+
+                <div
+                    class="project-visual visual-liquid"
+                >
+
+                    <span class="project-number">
+                        04 / 06
+                    </span>
+
+
+                    <span class="open-icon">
+                        ↗
+                    </span>
+
+
+                    <div class="visual-icon">
+                        🌊
+                    </div>
+
+                </div>
+
+
+                <div class="project-info">
+
+                    <div class="project-category">
+                        Creative / Animation
+                    </div>
+
+
+                    <h3 class="project-title">
+                        Liquid Effect
+                    </h3>
+
+
+                    <p class="project-description">
+
+                        An experimental interactive web
+                        experience featuring creative liquid
+                        inspired visual effects.
+
+                    </p>
+
+
+                    <div class="tags">
+
+                        <span class="tag">
+                            HTML
+                        </span>
+
+                        <span class="tag">
+                            CSS
+                        </span>
+
+                        <span class="tag">
+                            JavaScript
+                        </span>
+
+                        <span class="tag">
+                            Animation
+                        </span>
+
+                    </div>
+
+
+                    <div class="project-link">
+
+                        <span>
+                            View Project
+                        </span>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 PROJECT 05
+            ================================================== -->
+
+            <a
+                href="./clothingwebsite.html"
+                class="project-card"
+                data-name="clothing fashion ecommerce clothes"
+            >
+
+                <div
+                    class="project-visual visual-clothing"
+                >
+
+                    <span class="project-number">
+                        05 / 06
+                    </span>
+
+
+                    <span class="open-icon">
+                        ↗
+                    </span>
+
+
+                    <div class="visual-icon">
+                        👕
+                    </div>
+
+                </div>
+
+
+                <div class="project-info">
+
+                    <div class="project-category">
+                        Fashion / E-Commerce
+                    </div>
+
+
+                    <h3 class="project-title">
+                        Clothing Website
+                    </h3>
+
+
+                    <p class="project-description">
+
+                        A modern fashion and clothing website
+                        designed around products, collections
+                        and an engaging shopping experience.
+
+                    </p>
+
+
+                    <div class="tags">
+
+                        <span class="tag">
+                            HTML
+                        </span>
+
+                        <span class="tag">
+                            CSS
+                        </span>
+
+                        <span class="tag">
+                            JavaScript
+                        </span>
+
+                        <span class="tag">
+                            E-Commerce
+                        </span>
+
+                    </div>
+
+
+                    <div class="project-link">
+
+                        <span>
+                            View Project
+                        </span>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 PROJECT 06
+            ================================================== -->
+
+            <a
+                href="./restaurant.html"
+                class="project-card"
+                data-name="restaurant food cafe dining"
+            >
+
+                <div
+                    class="project-visual visual-restaurant"
+                >
+
+                    <span class="project-number">
+                        06 / 06
+                    </span>
+
+
+                    <span class="open-icon">
+                        ↗
+                    </span>
+
+
+                    <div class="visual-icon">
+                        🍽️
+                    </div>
+
+                </div>
+
+
+                <div class="project-info">
+
+                    <div class="project-category">
+                        Restaurant / Food
+                    </div>
+
+
+                    <h3 class="project-title">
+                        Restaurant Website
+                    </h3>
+
+
+                    <p class="project-description">
+
+                        A stylish restaurant landing page
+                        designed to showcase food, atmosphere,
+                        menu and dining experience.
+
+                    </p>
+
+
+                    <div class="tags">
+
+                        <span class="tag">
+                            HTML
+                        </span>
+
+                        <span class="tag">
+                            CSS
+                        </span>
+
+                        <span class="tag">
+                            JavaScript
+                        </span>
+
+                        <span class="tag">
+                            UI Design
+                        </span>
+
+                    </div>
+
+
+                    <div class="project-link">
+
+                        <span>
+                            View Project
+                        </span>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- SEARCH RESULT -->
+
+            <div
+                class="no-results"
+                id="noResults"
+            >
+
+                No projects found.
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         ABOUT
+    ====================================================== -->
+
+    <section
+        class="about-section"
+        id="about"
+    >
+
+        <div class="about-box">
+
+            <div class="section-label">
+                About
+            </div>
+
+
+            <h2>
+                Built to learn. Designed to impress.
+            </h2>
+
+
+            <p>
+
+                This repository is a collection of my frontend
+                development experiments and web projects.
+                I use these projects to explore responsive
+                layouts, modern interfaces, animations,
+                JavaScript interactions and different
+                visual design styles.
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <div>
+            © 2026 <strong>Azhar Ali</strong>
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="#projects">
+                Projects
+            </a>
+
+            <a href="#about">
+                About
+            </a>
+
+            <a
+                href="https://github.com/"
+                target="_blank"
+            >
+                GitHub ↗
+            </a>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        /* =================================================
+           PROJECT SEARCH
+        ================================================= */
+
+        const searchInput =
+            document.getElementById("searchInput");
+
+        const projectCards =
+            document.querySelectorAll(".project-card");
+
+        const noResults =
+            document.getElementById("noResults");
+
+
+        searchInput.addEventListener(
+            "input",
+            function () {
+
+                const searchValue =
+                    this.value
+                        .toLowerCase()
+                        .trim();
+
+
+                let visibleProjects = 0;
+
+
+                projectCards.forEach(
+                    function (card) {
+
+                        const projectName =
+                            card
+                                .getAttribute("data-name")
+                                .toLowerCase();
+
+
+                        if (
+                            projectName.includes(
+                                searchValue
+                            )
+                        ) {
+
+                            card.style.display = "";
+
+                            visibleProjects++;
+
+                        }
+
+                        else {
+
+                            card.style.display =
+                                "none";
+
+                        }
+
+                    }
+                );
+
+
+                if (visibleProjects === 0) {
+
+                    noResults.style.display =
+                        "block";
+
+                }
+
+                else {
+
+                    noResults.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+
+        /* =================================================
+           DYNAMIC PROJECT COUNT
+        ================================================= */
+
+        const projectCount =
+            document.getElementById(
+                "projectCount"
+            );
+
+
+        projectCount.textContent =
+            String(projectCards.length)
+                .padStart(2, "0");
+
+
+        /* =================================================
+           CARD STAGGER ANIMATION
+        ================================================= */
+
+        projectCards.forEach(
+            function (card, index) {
+
+                card.style.animationDelay =
+                    `${index * 0.08}s`;
+
+            }
+        );
+
+    </script>
+
+
+</body>
+</html>
